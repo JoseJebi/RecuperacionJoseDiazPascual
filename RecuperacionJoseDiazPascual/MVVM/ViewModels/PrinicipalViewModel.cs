@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 {
-    internal class PrinicipalViewModel
+    public class PrinicipalViewModel
     {
     }
 }

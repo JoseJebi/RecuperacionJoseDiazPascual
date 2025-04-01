@@ -3,10 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.PrincipalView"
              Title="PrincipalView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ContentPage.BindingContext>
+        <vm:PrincipalViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout Padding="20">
+        <CollectionView IsVisible="{Binding Tareas.Count}" ItemsSource="{Binding Tareas}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10">
+                        <StackLayout Orientation="Horizontal">
+                            <Label Source="{Binding Titulo}"/>
+                            <Label Source="{Binding Descripcion}"/>
+                            <Label Source="{Binding Estado}"/>
+                            <Label Source="{Binding Prioridad}"/>
+                            <StackLayout>
+                                <!-- Aqui va lo de las etiquetas -->
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
 </ContentPage>
