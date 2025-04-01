@@ -1,12 +1,30 @@
-﻿using System;
+﻿using RecuperacionJoseDiazPascual.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQLite;
+using SQLiteNetExtensions.Attributes;
 
 namespace RecuperacionJoseDiazPascual.MVVM.Models
 {
-    internal class Tarea
+    [Table("Tarea")]
+    public class Tarea : TableData
     {
+        [Column("titulo"), Indexed, NotNull]
+        public string Titulo { get; set; }
+
+        [Column("descripcion")]
+        public string Descripcion { get; set; }
+
+        [Column("estado")]
+        public string Estado { get; set; }
+
+        [Column("prioridad")]
+        public string Prioridad { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<Etiqueta> Etiquetas { get; set; }
     }
 }
