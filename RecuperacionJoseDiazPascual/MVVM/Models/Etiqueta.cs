@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RecuperacionJoseDiazPascual.MVVM.Models
 {
-    internal class Etiqueta
+    public class Etiqueta
     {
     }
 }
