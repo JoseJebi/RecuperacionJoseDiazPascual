@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using RecuperacionJoseDiazPascual.MVVM.Models;
 
 namespace RecuperacionJoseDiazPascual
 {
@@ -15,8 +16,10 @@ namespace RecuperacionJoseDiazPascual
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<Repositories.BaseRepository<Tarea>>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

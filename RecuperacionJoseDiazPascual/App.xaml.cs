@@ -1,12 +1,20 @@
-﻿namespace RecuperacionJoseDiazPascual
+﻿using RecuperacionJoseDiazPascual.MVVM.Models;
+using RecuperacionJoseDiazPascual.MVVM.Views;
+using RecuperacionJoseDiazPascual.Repositories;
+
+namespace RecuperacionJoseDiazPascual
 {
     public partial class App : Application
     {
-        public App()
+        public static BaseRepository<Tarea> TareaRepositorio { get; set; }
+
+        public App(BaseRepository<Tarea> objTareaRepo)
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            TareaRepositorio = objTareaRepo;
+
+            MainPage = new PrincipalView();
         }
     }
 }
