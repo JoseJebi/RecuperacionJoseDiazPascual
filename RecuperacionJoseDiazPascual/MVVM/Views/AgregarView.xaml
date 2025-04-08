@@ -2,21 +2,119 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.AgregarView"
-             Title="AgregarView">
-    
-    <VerticalStackLayout Spacing="25">
-        <Entry Placeholder="Nombre de la tarea"
-               MaxLength="50"
-               Text="{Binding AgTarea}"/>
-        
-        <Editor Placeholder="Agrega una tarea"
-                HeightRequest="100"
-                Text="{Binding AgDescripcion}"/>
-        
-        <Picker Title="Selecciona la prioridad"
-                ItemsSource="{Binding ListaPrioridades}"
-                SelectedItem="{Binding PrioridadSeleccionada}"/>
+             Title="Agregar Tarea"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
-        <Switch IsToggled= "{Binding Estado}" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="20">
+            <!-- Título de la página -->
+            <Label Text="Nueva Tarea" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   TextColor="{StaticResource Primary}"/>
+
+            <!-- Campo Nombre de Tarea -->
+            <Frame CornerRadius="12" 
+                   Padding="15" 
+                   BorderColor="LightGray" 
+                   BackgroundColor="{StaticResource Gray200}">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Nombre de la tarea*" 
+                           FontSize="14" 
+                           TextColor="Gray"/>
+                    <Entry Placeholder="Ej: Comprar leche" 
+                           MaxLength="50"
+                           Text="{Binding AgTarea}"
+                           FontSize="16"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Campo Descripción -->
+            <Frame CornerRadius="12" 
+                   Padding="15" 
+                   BorderColor="LightGray" 
+                   BackgroundColor="White">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Descripción" 
+                           FontSize="14" 
+                           TextColor="Gray"/>
+                    <Editor Placeholder="Detalles de la tarea..."
+                            HeightRequest="100"
+                            Text="{Binding AgDescripcion}"
+                            FontSize="16"
+                            AutoSize="TextChanges"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Selector de Prioridad Mejorado -->
+            <Frame CornerRadius="12"  
+                   Padding="15" 
+                   BorderColor="LightGray" 
+                   BackgroundColor="White">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Prioridad*" 
+                FontSize="14" 
+                TextColor="Gray"/>
+
+                    <Grid>
+                        <!-- Picker visible con color de texto -->
+                        <Picker x:Name="PrioridadPicker"
+                                Title="Selecciona prioridad"
+                                ItemsSource="{Binding ListaPrioridades}"
+                                SelectedItem="{Binding PrioridadSeleccionada}"
+                                FontSize="16"
+                                TextColor="Black"/>
+
+                        <!-- Display visual de la prioridad seleccionada -->
+                            <Frame Padding="12" 
+                                   CornerRadius="8" 
+                                   BackgroundColor="{StaticResource Gray200}">
+                                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                    
+                                <Label Text="{Binding PrioridadSeleccionada}" 
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"/>
+
+                                <Label Text="▼" 
+                                       FontSize="12"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       Margin="5,0,0,0"/>
+                            </HorizontalStackLayout>
+                            </Frame>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+
+            <!-- Switch de Estado -->
+            <Frame CornerRadius="12" 
+                   Padding="15" 
+                   BorderColor="LightGray" 
+                   BackgroundColor="White">
+                <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
+                    <Label Text="¿Tarea completada?" 
+                           FontSize="16" 
+                           VerticalOptions="Center"
+                           FontAttributes="Bold"/>
+                    <Switch IsToggled="{Binding Estado}"
+                            HorizontalOptions="EndAndExpand"
+                            OnColor="{StaticResource Primary}"/>
+                </HorizontalStackLayout>
+            </Frame>
+
+            <!-- Botón de acción -->
+            <Button Text="Guardar Tarea" 
+                    Command="{Binding AgregarCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    Margin="0,20,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
