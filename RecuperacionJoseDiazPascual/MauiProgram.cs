@@ -17,6 +17,7 @@ namespace RecuperacionJoseDiazPascual
                 });
 
             builder.Services.AddSingleton<Repositories.BaseRepository<Tarea>>();
+            builder.Services.AddSingleton<Repositories.BaseRepository<Etiqueta>>();
 
 #if DEBUG
             builder.Logging.AddDebug();
