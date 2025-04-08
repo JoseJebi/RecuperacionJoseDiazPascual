@@ -1,4 +1,6 @@
-﻿namespace RecuperacionJoseDiazPascual
+﻿using RecuperacionJoseDiazPascual.MVVM.Views;
+
+namespace RecuperacionJoseDiazPascual
 {
     public partial class App : Application
     {
@@ -6,7 +8,7 @@
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            MainPage = new AgregarView();
         }
     }
 }

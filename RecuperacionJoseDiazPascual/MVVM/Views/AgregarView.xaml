@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecuperacionJoseDiazPascual.MVVM.Views.AgregarView"
+             Title="AgregarView">
+    
+    <VerticalStackLayout Spacing="25">
+        <Entry Placeholder="Nombre de la tarea"
+               MaxLength="50"
+               Text="{Binding AgTarea}"/>
+        
+        <Editor Placeholder="Agrega una tarea"
+                HeightRequest="100"
+                Text="{Binding AgDescripcion}"/>
+        
+        <Picker Title="Selecciona la prioridad"
+                ItemsSource="{Binding ListaPrioridades}"
+                SelectedItem="{Binding PrioridadSeleccionada}"/>
+
+        <Switch IsToggled= "{Binding Estado}" />
+    </VerticalStackLayout>
+</ContentPage>

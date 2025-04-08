@@ -8,7 +8,7 @@ namespace RecuperacionJoseDiazPascual
 {
     public class Constantes
     {
-        private const string DATABASE_NAME = "Prueba1.db3";
+        private const string DATABASE_NAME = "TareasRecuperacion.db3";
 
         public const SQLite.SQLiteOpenFlags Flags =
             SQLite.SQLiteOpenFlags.ReadWrite |

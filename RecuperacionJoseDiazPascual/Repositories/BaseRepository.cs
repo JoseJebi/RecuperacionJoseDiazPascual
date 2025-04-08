@@ -80,7 +80,6 @@ namespace RecuperacionJoseDiazPascual.Repositories
             }
             return null;
         }
-
         public List<T> GetItemsCascada()
         {
             try
@@ -107,8 +106,6 @@ namespace RecuperacionJoseDiazPascual.Repositories
             }
             return null;
         }
-
-
         public void SaveItem(T item)
         {
             int result = 0;
@@ -134,7 +131,6 @@ namespace RecuperacionJoseDiazPascual.Repositories
                 $"Error: {ex.Message}";
             }
         }
-
         public void SaveItemCascada(T item, bool isCascada = true)
         {
             //De momento solo insertar
