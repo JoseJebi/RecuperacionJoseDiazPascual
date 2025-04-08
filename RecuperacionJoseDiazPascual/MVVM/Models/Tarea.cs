@@ -26,5 +26,17 @@ namespace RecuperacionJoseDiazPascual.MVVM.Models
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<Etiqueta> Etiquetas { get; set; }
+
+        public String EtiquetasString()
+        {
+            string etiquetas = "";
+
+            foreach (Etiqueta etiqueta in Etiquetas)
+            {
+                etiquetas += etiqueta.Titulo + ", ";
+            }
+
+            return etiquetas.Substring(0, etiquetas.Length - 3);
+        }
     }
 }

@@ -3,9 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.PrincipalView"
              Title="PrincipalView">
-    <ContentPage.BindingContext>
-        <vm:PrincipalViewModel />
-    </ContentPage.BindingContext>
 
     <StackLayout Padding="20">
         <CollectionView IsVisible="{Binding Tareas.Count}" ItemsSource="{Binding Tareas}">
@@ -13,13 +10,10 @@
                 <DataTemplate>
                     <Frame Padding="10">
                         <StackLayout Orientation="Horizontal">
-                            <Label Source="{Binding Titulo}"/>
-                            <Label Source="{Binding Descripcion}"/>
-                            <Label Source="{Binding Estado}"/>
-                            <Label Source="{Binding Prioridad}"/>
-                            <StackLayout>
-                                <!-- Aqui va lo de las etiquetas -->
-                            </StackLayout>
+                            <Label Text="{Binding Titulo}"/>
+                            <Label Text="{Binding Descripcion}"/>
+                            <Label Text="{Binding Estado}"/>
+                            <Label Text="{Binding EtiquetasString}"/>
                         </StackLayout>
                     </Frame>
                 </DataTemplate>
