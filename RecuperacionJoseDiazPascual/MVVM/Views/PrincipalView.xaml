@@ -5,19 +5,22 @@
              Title="PrincipalView">
 
     <StackLayout Padding="20">
-        <CollectionView IsVisible="{Binding Tareas.Count}" ItemsSource="{Binding Tareas}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10">
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding Titulo}"/>
-                            <Label Text="{Binding Descripcion}"/>
-                            <Label Text="{Binding Estado}"/>
-                            <Label Text="{Binding EtiquetasString}"/>
-                        </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+            Command="{Binding RefreshCommand}">
+            <CollectionView IsVisible="{Binding Tareas.Count}" ItemsSource="{Binding Tareas}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Titulo}"/>
+                                <Label Text="{Binding Descripcion}"/>
+                                <Label Text="{Binding Estado}"/>
+                                <Label Text="{Binding EtiquetasString}"/>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
     </StackLayout>
 </ContentPage>
