@@ -18,7 +18,7 @@
             <Frame CornerRadius="12" 
                    Padding="15" 
                    BorderColor="LightGray" 
-                   BackgroundColor="{StaticResource Gray200}">
+                   BackgroundColor="{StaticResource Gray900}">
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Nombre de la tarea*" 
                            FontSize="14" 
@@ -34,7 +34,7 @@
             <Frame CornerRadius="12" 
                    Padding="15" 
                    BorderColor="LightGray" 
-                   BackgroundColor="White">
+                   BackgroundColor="{StaticResource Gray900}">
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Descripción" 
                            FontSize="14" 
@@ -47,45 +47,20 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Selector de Prioridad Mejorado -->
+            <!-- Selector de Prioridad -->
             <Frame CornerRadius="12"  
                    Padding="15" 
                    BorderColor="LightGray" 
-                   BackgroundColor="White">
+                   BackgroundColor="{StaticResource Gray900}">
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Prioridad*" 
-                FontSize="14" 
-                TextColor="Gray"/>
-
-                    <Grid>
-                        <!-- Picker visible con color de texto -->
-                        <Picker x:Name="PrioridadPicker"
-                                Title="Selecciona prioridad"
-                                ItemsSource="{Binding ListaPrioridades}"
-                                SelectedItem="{Binding PrioridadSeleccionada}"
-                                FontSize="16"
-                                TextColor="Black"/>
-
-                        <!-- Display visual de la prioridad seleccionada -->
-                            <Frame Padding="12" 
-                                   CornerRadius="8" 
-                                   BackgroundColor="{StaticResource Gray200}">
-                                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                                    
-                                <Label Text="{Binding PrioridadSeleccionada}" 
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       TextColor="White"
-                                       VerticalOptions="Center"/>
-
-                                <Label Text="▼" 
-                                       FontSize="12"
-                                       TextColor="White"
-                                       VerticalOptions="Center"
-                                       Margin="5,0,0,0"/>
-                            </HorizontalStackLayout>
-                            </Frame>
-                    </Grid>
+                           FontSize="14" 
+                           TextColor="Gray"/>
+                    <Picker ItemsSource="{Binding ListaPrioridades}"
+                            SelectedItem="{Binding PrioridadSeleccionada}"
+                            FontSize="16"
+                            TextColor="White"
+                            BackgroundColor="{StaticResource Gray300}"/>
                 </VerticalStackLayout>
             </Frame>
 
@@ -94,14 +69,13 @@
             <Frame CornerRadius="12" 
                    Padding="15" 
                    BorderColor="LightGray" 
-                   BackgroundColor="White">
+                   BackgroundColor="{StaticResource Gray900}">
                 <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                     <Label Text="¿Tarea completada?" 
                            FontSize="16" 
                            VerticalOptions="Center"
                            FontAttributes="Bold"/>
                     <Switch IsToggled="{Binding Estado}"
-                            HorizontalOptions="EndAndExpand"
                             OnColor="{StaticResource Primary}"/>
                 </HorizontalStackLayout>
             </Frame>
