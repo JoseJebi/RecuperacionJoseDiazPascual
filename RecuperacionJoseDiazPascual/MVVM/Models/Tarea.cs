@@ -24,7 +24,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.Models
         [Column("prioridad")]
         public string Prioridad { get; set; }
 
-        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        [ManyToMany(typeof(EtiquetasTarea), CascadeOperations = CascadeOperation.All)]
         public List<Etiqueta> Etiquetas { get; set; }
 
         public String EtiquetasString()

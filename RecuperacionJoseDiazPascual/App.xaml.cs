@@ -7,10 +7,16 @@ namespace RecuperacionJoseDiazPascual
     {
         public static BaseRepository<Tarea> TareaRepositorio { get; set; }
         public static BaseRepository<Etiqueta> EtiquetaRepositorio { get; set; }
+        public static BaseRepository<EtiquetasTarea> EtiquetasTareaRepositorio { get; set; }
 
-        public App(BaseRepository<Tarea> objTareaRepo, BaseRepository<Etiqueta> objEtiquetaRepo)
+        public App(BaseRepository<Tarea> objTareaRepo, BaseRepository<Etiqueta> objEtiquetaRepo, 
+            BaseRepository<EtiquetasTarea> objEtiquetasTareaRepo)
         {
             InitializeComponent();
+
+            TareaRepositorio = objTareaRepo;
+            EtiquetaRepositorio = objEtiquetaRepo;
+            EtiquetasTareaRepositorio = objEtiquetasTareaRepo;
 
             MainPage = new AppShell();
         }
