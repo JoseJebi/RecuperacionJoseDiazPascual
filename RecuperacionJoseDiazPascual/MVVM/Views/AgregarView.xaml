@@ -25,7 +25,7 @@
                            TextColor="Gray"/>
                     <Entry Placeholder="Ej: Comprar leche" 
                            MaxLength="50"
-                           Text="{Binding AgTarea}"
+                           Text="{Binding AgTitulo}"
                            FontSize="16"/>
                 </VerticalStackLayout>
             </Frame>
@@ -82,7 +82,7 @@
 
             <!-- Botón de acción -->
             <Button Text="Guardar Tarea" 
-                    Command="{Binding AgregarCommand}"
+                    Command="{Binding AgTarea}"
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="White"
                     FontAttributes="Bold"

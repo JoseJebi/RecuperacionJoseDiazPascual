@@ -1,4 +1,5 @@
 ﻿using RecuperacionJoseDiazPascual.MVVM.Models;
+using RecuperacionJoseDiazPascual.MVVM.Views;
 using RecuperacionJoseDiazPascual.Repositories;
 
 namespace RecuperacionJoseDiazPascual
@@ -12,7 +13,7 @@ namespace RecuperacionJoseDiazPascual
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            MainPage = new AgregarView();
         }
     }
 }
