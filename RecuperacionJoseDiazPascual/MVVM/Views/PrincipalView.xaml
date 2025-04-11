@@ -4,23 +4,38 @@
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.PrincipalView"
              Title="PrincipalView">
 
-    <StackLayout Padding="20">
-        <RefreshView IsRefreshing="{Binding IsRefreshing}"
-            Command="{Binding RefreshCommand}">
-            <CollectionView IsVisible="{Binding Tareas.Count}" ItemsSource="{Binding Tareas}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Padding="10">
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding Titulo}"/>
-                                <Label Text="{Binding Descripcion}"/>
-                                <Label Text="{Binding Estado}"/>
-                                <Label Text="{Binding EtiquetasString}"/>
-                            </StackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
-    </StackLayout>
+    <Grid>
+        <StackLayout Padding="20">
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                    Command="{Binding RefreshCommand}">
+                <CollectionView IsVisible="{Binding Tareas.Count}" ItemsSource="{Binding Tareas}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="10">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Titulo}"/>
+                                    <Label Text="{Binding Descripcion}"/>
+                                    <Label Text="{Binding Estado}"/>
+                                    <Label Text="{Binding EtiquetasString}"/>
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+
+        <Button
+            Text="+"
+            FontSize="24"
+            WidthRequest="60"
+            HeightRequest="60"
+            BackgroundColor="#2196F3"
+            TextColor="White"
+            CornerRadius="30"
+            HorizontalOptions="Start"
+            VerticalOptions="End"
+            Margin="20"
+            Command="{Binding AgregarCommand}" />
+    </Grid>
 </ContentPage>

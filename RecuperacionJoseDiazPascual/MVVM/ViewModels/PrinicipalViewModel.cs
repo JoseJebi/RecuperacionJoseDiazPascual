@@ -44,5 +44,10 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
             IsRefreshing = false;
         }
+
+        private void AgregarTarea()
+        {
+            // Aqui hay que mandar al usuario a AgregarView
+        }
     }
 }
