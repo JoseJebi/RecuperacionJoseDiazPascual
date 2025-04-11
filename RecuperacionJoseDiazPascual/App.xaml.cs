@@ -1,4 +1,5 @@
 ﻿using RecuperacionJoseDiazPascual.MVVM.Models;
+using RecuperacionJoseDiazPascual.MVVM.Views;
 using RecuperacionJoseDiazPascual.Repositories;
 
 namespace RecuperacionJoseDiazPascual
@@ -18,7 +19,7 @@ namespace RecuperacionJoseDiazPascual
             EtiquetaRepositorio = objEtiquetaRepo;
             EtiquetasTareaRepositorio = objEtiquetasTareaRepo;
 
-            MainPage = new AppShell();
+            MainPage = new PrincipalView();
         }
     }
 }

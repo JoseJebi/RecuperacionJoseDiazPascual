@@ -1,5 +1,6 @@
 ﻿using PropertyChanged;
 using RecuperacionJoseDiazPascual.MVVM.Models;
+using RecuperacionJoseDiazPascual.MVVM.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -47,7 +48,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
         private void AgregarTarea()
         {
-            // Aqui hay que mandar al usuario a AgregarView
+            new AgregarView();
         }
     }
 }
