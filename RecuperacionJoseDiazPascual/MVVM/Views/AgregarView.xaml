@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:RecuperacionJoseDiazPascual.MVVM.Converters"
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.AgregarView"
              Title="Agregar Tarea"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
     <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
-            <local:CountToInverseVisibilityConverter x:Key="CountToInverseVisibilityConverter"/>
-        </ResourceDictionary>
+        <converters:CountToVisibilityConverter x:Key="countConvert"/>
+        <converters:InverseCountToVisibilityConverter x:Key="invertCountConvert"/>
     </ContentPage.Resources>
     
     <ScrollView>
@@ -39,49 +38,23 @@
                             BackgroundColor="{StaticResource Gray300}"
                             Title="Selecciona etiquetas..."/>
 
-                    <!-- Etiquetas seleccionadas - Versión mejorada -->
-                    <Frame CornerRadius="10" 
-                           BackgroundColor="{StaticResource Gray900}" 
+                    <!-- Muestra las etiquetas seleccionadas -->
+                    <Label Text="Etiquetas seleccionadas:" 
+                           FontSize="14" 
+                           TextColor="Gray"/>
+
+                    <Frame CornerRadius="10"
                            Padding="10"
-                           IsVisible="{Binding EtiquetasSeleccionadas.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                        <VerticalStackLayout Spacing="8">
-                            <Label Text="Etiquetas seleccionadas:" 
-                                   FontSize="14" 
-                                   TextColor="LightGray"/>
-
-                            <FlexLayout BindableLayout.ItemsSource="{Binding EtiquetasSeleccionadas}"
-                                        Wrap="Wrap"
-                                        AlignItems="Start"
-                                        JustifyContent="Start">
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate>
-                                        <Frame CornerRadius="8"
-                                               Padding="8,4"
-                                               Margin="0,0,5,5"
-                                               BackgroundColor="{StaticResource PrimaryColor}">
-                                            <HorizontalStackLayout Spacing="5">
-                                                <Label Text="{Binding .}" 
-                                                       TextColor="White"
-                                                       VerticalOptions="Center"/>
-                                                <Button Text="×" 
-                                                        TextColor="White"
-                                                        BackgroundColor="Transparent"
-                                                        FontSize="14"
-                                                        FontAttributes="Bold"
-                                                        Padding="0"/>
-                                            </HorizontalStackLayout>
-                                        </Frame>
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </FlexLayout>
-                        </VerticalStackLayout>
+                           BackgroundColor="{StaticResource Gray900}">
+                        <Label Text="{Binding EtiquetasSeleccionadasString}"
+                               FontSize="14"
+                               TextColor="White"/>
                     </Frame>
-
-                    <!-- Mensaje cuando no hay etiquetas seleccionadas -->
-                    <Label Text="No hay etiquetas seleccionadas"
-               FontSize="14"
-               TextColor="Gray"
-               IsVisible="{Binding EtiquetasSeleccionadas.Count, Converter={StaticResource CountToInverseVisibilityConverter}}"/>
+                   
+                    <Button Text="Limpiar etiquetas"
+                            Command="{Binding LimpiarEtiquetasCommand}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"/>
                 </VerticalStackLayout>
             </Frame>
 

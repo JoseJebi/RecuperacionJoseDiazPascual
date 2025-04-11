@@ -1,6 +1,7 @@
 ﻿using PropertyChanged;
 using RecuperacionJoseDiazPascual.MVVM.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 
 namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
@@ -9,18 +10,20 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
     public class AgregarViewModel
     {
         public ICommand AgTarea { get; }
-        public string AgTitulo { get; set; }
-        public string AgDescripcion { get; set; }
-        public List<string> ListaPrioridades { get; set; }
-        public string PrioridadSeleccionada { get; set; }
-        public List<string> ListaEtiquetas { get; set; }
-        public List<string> EtiquetasSeleccionadas { get; set; }
-
+        public string? AgTitulo { get; set; }
+        public string? AgDescripcion { get; set; }
         public bool Estado { get; set; }
 
+        public List<string> ListaPrioridades { get; set; }
+        public string PrioridadSeleccionada { get; set; }
+
+
+        public List<string> ListaEtiquetas { get; set; }
+        public List<string> EtiquetasSeleccionadas { get; set; }
+        public ICommand LimpiarEtiquetasCommand { get; }
         public string EtiquetaTemporal
         {
-            get => null; // Siempre retorna null para resetear el Picker
+            get => null;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && !EtiquetasSeleccionadas.Contains(value))
@@ -29,15 +32,12 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 }
             }
         }
-
         public string EtiquetasSeleccionadasString =>
-            EtiquetasSeleccionadas.Any() ? string.Join(", ", EtiquetasSeleccionadas) : "Ninguna etiqueta seleccionada";
+            EtiquetasSeleccionadas.Any()
+                ? string.Join(", ", EtiquetasSeleccionadas)
+                : "Ninguna etiqueta seleccionada";
 
-        private void EliminarEtiqueta(string etiqueta)
-        {
-            EtiquetasSeleccionadas.Remove(etiqueta);
-        }
-
+        // Constructor
         public AgregarViewModel()
         {
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
@@ -46,23 +46,23 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             ListaEtiquetas = new List<string> { "Trabajo", "Estudios", "Personal", "Salud" };
             EtiquetasSeleccionadas = new List<string>();
 
+            LimpiarEtiquetasCommand = new Command(() => EtiquetasSeleccionadas.Clear());
+
             AgTarea = new Command(GuardarTarea);
         }
 
-
-
-        // Método para guardar la tarea nueva
+        // Método para guardar la tarea creada
         private async void GuardarTarea()
         {
             if (string.IsNullOrWhiteSpace(AgTitulo) ||
                 string.IsNullOrWhiteSpace(AgDescripcion) ||
                 PrioridadSeleccionada == null ||
-                EtiquetasSeleccionadas == null || !EtiquetasSeleccionadas.Any())
+                !EtiquetasSeleccionadas.Any())
             {
-                await Shell.Current.DisplayAlert("Campos incompletos", "Por favor, completa todos los campos antes de continuar.", "Aceptar");
+                await Shell.Current.DisplayAlert("Error", "Por favor, completa todos los campos", "Aceptar");
                 return;
             }
-                
+
             var nuevaTarea = new Tarea
             {
                 Titulo = AgTitulo,
@@ -73,16 +73,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             };
 
             App.TareaRepositorio.SaveItem(nuevaTarea);
-
-            // Vuelve atrás después de guardar
-            //Application.Current.MainPage.Navigation.PopAsync();
         }
-
-
-        /*
-            1. Para el check de tarea finalizada o no utilizar un convertes como en los apuntes.
-            2. Para crear comandos T8_07 pag.7 [Solamente para botones]
-            3. Para el CRUD T8_13 pag.6 
-        */
     }
 }
