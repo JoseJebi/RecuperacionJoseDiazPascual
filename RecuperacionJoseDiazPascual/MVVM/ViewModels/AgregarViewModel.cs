@@ -11,29 +11,65 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public ICommand AgTarea { get; }
         public string AgTitulo { get; set; }
         public string AgDescripcion { get; set; }
+        public List<string> ListaPrioridades { get; set; }
         public string PrioridadSeleccionada { get; set; }
+        public List<string> ListaEtiquetas { get; set; }
+        public List<string> EtiquetasSeleccionadas { get; set; }
+
         public bool Estado { get; set; }
 
-        public List<string> ListaPrioridades { get; set; }
+        public string EtiquetaTemporal
+        {
+            get => null; // Siempre retorna null para resetear el Picker
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value) && !EtiquetasSeleccionadas.Contains(value))
+                {
+                    EtiquetasSeleccionadas.Add(value);
+                }
+            }
+        }
+
+        public string EtiquetasSeleccionadasString =>
+            EtiquetasSeleccionadas.Any() ? string.Join(", ", EtiquetasSeleccionadas) : "Ninguna etiqueta seleccionada";
+
+        private void EliminarEtiqueta(string etiqueta)
+        {
+            EtiquetasSeleccionadas.Remove(etiqueta);
+        }
 
         public AgregarViewModel()
         {
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
             PrioridadSeleccionada = ListaPrioridades[1];
 
+            ListaEtiquetas = new List<string> { "Trabajo", "Estudios", "Personal", "Salud" };
+            EtiquetasSeleccionadas = new List<string>();
+
             AgTarea = new Command(GuardarTarea);
         }
 
+
+
         // Método para guardar la tarea nueva
-        private void GuardarTarea()
+        private async void GuardarTarea()
         {
-           
+            if (string.IsNullOrWhiteSpace(AgTitulo) ||
+                string.IsNullOrWhiteSpace(AgDescripcion) ||
+                PrioridadSeleccionada == null ||
+                EtiquetasSeleccionadas == null || !EtiquetasSeleccionadas.Any())
+            {
+                await Shell.Current.DisplayAlert("Campos incompletos", "Por favor, completa todos los campos antes de continuar.", "Aceptar");
+                return;
+            }
+                
             var nuevaTarea = new Tarea
             {
                 Titulo = AgTitulo,
                 Descripcion = AgDescripcion,
                 Prioridad = PrioridadSeleccionada,
-                Estado = Estado ? "Finalizada" : "Pendiente"
+                Estado = Estado ? "Finalizada" : "Pendiente",
+                Etiquetas = EtiquetasSeleccionadas.Select(titulo => new Etiqueta { Titulo = titulo }).ToList()
             };
 
             App.TareaRepositorio.SaveItem(nuevaTarea);
@@ -41,15 +77,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             // Vuelve atrás después de guardar
             //Application.Current.MainPage.Navigation.PopAsync();
         }
-
-
-
-
-
-
-
-
-
 
 
         /*

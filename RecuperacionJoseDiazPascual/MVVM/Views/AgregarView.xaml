@@ -5,6 +5,13 @@
              Title="Agregar Tarea"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+            <local:CountToInverseVisibilityConverter x:Key="CountToInverseVisibilityConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="20">
             <!-- Título de la página -->
@@ -13,6 +20,70 @@
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
                    TextColor="{StaticResource Primary}"/>
+
+            <!-- Selector de Etiquetas -->
+            <Frame CornerRadius="12"  
+                   Padding="15" 
+                   BorderColor="LightGray" 
+                   BackgroundColor="{StaticResource Gray900}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Etiquetas*" 
+                           FontSize="14" 
+                           TextColor="Gray"/>
+
+                    <!-- Picker para agregar etiquetas -->
+                    <Picker ItemsSource="{Binding ListaEtiquetas}"
+                            SelectedItem="{Binding EtiquetaTemporal}"
+                            FontSize="16"
+                            TextColor="White"
+                            BackgroundColor="{StaticResource Gray300}"
+                            Title="Selecciona etiquetas..."/>
+
+                    <!-- Etiquetas seleccionadas - Versión mejorada -->
+                    <Frame CornerRadius="10" 
+                           BackgroundColor="{StaticResource Gray900}" 
+                           Padding="10"
+                           IsVisible="{Binding EtiquetasSeleccionadas.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Etiquetas seleccionadas:" 
+                                   FontSize="14" 
+                                   TextColor="LightGray"/>
+
+                            <FlexLayout BindableLayout.ItemsSource="{Binding EtiquetasSeleccionadas}"
+                                        Wrap="Wrap"
+                                        AlignItems="Start"
+                                        JustifyContent="Start">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame CornerRadius="8"
+                                               Padding="8,4"
+                                               Margin="0,0,5,5"
+                                               BackgroundColor="{StaticResource PrimaryColor}">
+                                            <HorizontalStackLayout Spacing="5">
+                                                <Label Text="{Binding .}" 
+                                                       TextColor="White"
+                                                       VerticalOptions="Center"/>
+                                                <Button Text="×" 
+                                                        TextColor="White"
+                                                        BackgroundColor="Transparent"
+                                                        FontSize="14"
+                                                        FontAttributes="Bold"
+                                                        Padding="0"/>
+                                            </HorizontalStackLayout>
+                                        </Frame>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Mensaje cuando no hay etiquetas seleccionadas -->
+                    <Label Text="No hay etiquetas seleccionadas"
+               FontSize="14"
+               TextColor="Gray"
+               IsVisible="{Binding EtiquetasSeleccionadas.Count, Converter={StaticResource CountToInverseVisibilityConverter}}"/>
+                </VerticalStackLayout>
+            </Frame>
 
             <!-- Campo Nombre de Tarea -->
             <Frame CornerRadius="12" 
