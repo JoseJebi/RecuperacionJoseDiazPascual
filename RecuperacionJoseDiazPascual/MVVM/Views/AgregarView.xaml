@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:converters="clr-namespace:RecuperacionJoseDiazPascual.MVVM.Converters"
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.AgregarView"
              Title="Agregar Tarea"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
-
-    <ContentPage.Resources>
-        <converters:EtiquetaCheckedConverter x:Key="EtiquetaCheckedConverter"/>
-    </ContentPage.Resources>
     
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="20">
@@ -44,7 +39,6 @@
                 </VerticalStackLayout>
             </Frame>
 
-
             <!-- Campo Nombre de Tarea -->
             <Frame CornerRadius="12" 
                    Padding="15" 
@@ -67,7 +61,7 @@
                    BorderColor="LightGray" 
                    BackgroundColor="{StaticResource Gray900}">
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Descripción" 
+                    <Label Text="Descripción*" 
                            FontSize="14" 
                            TextColor="Gray"/>
                     <Editor Placeholder="Detalles de la tarea..."

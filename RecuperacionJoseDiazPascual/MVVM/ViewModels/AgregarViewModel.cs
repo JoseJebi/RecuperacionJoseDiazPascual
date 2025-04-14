@@ -113,31 +113,4 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             PrioridadSeleccionada = ListaPrioridades[1];
         }
     }
-
-    // Clase auxiliar para manejar el estado de selección de cada etiqueta
-    public class EtiquetaSeleccionada : INotifyPropertyChanged
-    {
-        public string Nombre { get; set; }
-
-        private bool _seleccionada;
-        public bool Seleccionada
-        {
-            get => _seleccionada;
-            set
-            {
-                if (_seleccionada != value)
-                {
-                    _seleccionada = value;
-                    OnPropertyChanged(nameof(Seleccionada));
-                }
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
 }
