@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -7,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace RecuperacionJoseDiazPascual.MVVM.Converters
 {
-    public class InverseCountToVisibilityConverter : IValueConverter
+    public class EtiquetaCheckedConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int count) return count == 0;
-            if (value is System.Collections.ICollection collection) return collection.Count == 0;
-            return true;
+            var etiquetasSeleccionadas = value as ObservableCollection<string>;
+            var etiqueta = parameter as string;
+            return etiquetasSeleccionadas?.Contains(etiqueta) ?? false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

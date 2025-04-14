@@ -7,8 +7,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
     <ContentPage.Resources>
-        <converters:CountToVisibilityConverter x:Key="countConvert"/>
-        <converters:InverseCountToVisibilityConverter x:Key="invertCountConvert"/>
+        <converters:EtiquetaCheckedConverter x:Key="EtiquetaCheckedConverter"/>
     </ContentPage.Resources>
     
     <ScrollView>
@@ -25,38 +24,26 @@
                    Padding="15" 
                    BorderColor="LightGray" 
                    BackgroundColor="{StaticResource Gray900}">
+
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Etiquetas*" 
                            FontSize="14" 
                            TextColor="Gray"/>
 
-                    <!-- Picker para agregar etiquetas -->
-                    <Picker ItemsSource="{Binding ListaEtiquetas}"
-                            SelectedItem="{Binding EtiquetaTemporal}"
-                            FontSize="16"
-                            TextColor="White"
-                            BackgroundColor="{StaticResource Gray300}"
-                            Title="Selecciona etiquetas..."/>
-
-                    <!-- Muestra las etiquetas seleccionadas -->
-                    <Label Text="Etiquetas seleccionadas:" 
-                           FontSize="14" 
-                           TextColor="Gray"/>
-
-                    <Frame CornerRadius="10"
-                           Padding="10"
-                           BackgroundColor="{StaticResource Gray900}">
-                        <Label Text="{Binding EtiquetasSeleccionadasString}"
-                               FontSize="14"
-                               TextColor="White"/>
-                    </Frame>
-                   
-                    <Button Text="Limpiar etiquetas"
-                            Command="{Binding LimpiarEtiquetasCommand}"
-                            BackgroundColor="{StaticResource Primary}"
-                            TextColor="White"/>
+                    <!-- CollectionView con CheckBox para selección múltiple -->
+                    <CollectionView ItemsSource="{Binding EtiquetasConSeleccion}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout Spacing="10">
+                                    <CheckBox IsChecked="{Binding Seleccionada}"/>
+                                    <Label Text="{Binding Nombre}" TextColor="White"/>
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </VerticalStackLayout>
             </Frame>
+
 
             <!-- Campo Nombre de Tarea -->
             <Frame CornerRadius="12" 

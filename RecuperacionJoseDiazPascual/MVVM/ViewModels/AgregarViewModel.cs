@@ -1,6 +1,8 @@
 ﻿using PropertyChanged;
 using RecuperacionJoseDiazPascual.MVVM.Models;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -9,6 +11,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class AgregarViewModel
     {
+
         public ICommand AgTarea { get; }
         public string? AgTitulo { get; set; }
         public string? AgDescripcion { get; set; }
@@ -17,47 +20,65 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public List<string> ListaPrioridades { get; set; }
         public string PrioridadSeleccionada { get; set; }
 
+        // Cambiamos a ObservableCollection para que la UI se actualice automáticamente
+        public ObservableCollection<string> ListaEtiquetas { get; set; }
 
-        public List<string> ListaEtiquetas { get; set; }
-        public List<string> EtiquetasSeleccionadas { get; set; }
+        // Modelo para manejar las etiquetas seleccionadas
+        public ObservableCollection<EtiquetaSeleccionada> EtiquetasConSeleccion { get; set; }
+
         public ICommand LimpiarEtiquetasCommand { get; }
-        public string EtiquetaTemporal
-        {
-            get => null;
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value) && !EtiquetasSeleccionadas.Contains(value))
-                {
-                    EtiquetasSeleccionadas.Add(value);
-                }
-            }
-        }
+
+        // Propiedad calculada para mostrar las etiquetas seleccionadas
         public string EtiquetasSeleccionadasString =>
-            EtiquetasSeleccionadas.Any()
-                ? string.Join(", ", EtiquetasSeleccionadas)
+            EtiquetasConSeleccion.Any(e => e.Seleccionada)
+                ? string.Join(", ", EtiquetasConSeleccion.Where(e => e.Seleccionada).Select(e => e.Nombre))
                 : "Ninguna etiqueta seleccionada";
 
-        // Constructor
         public AgregarViewModel()
         {
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
             PrioridadSeleccionada = ListaPrioridades[1];
 
-            ListaEtiquetas = new List<string> { "Trabajo", "Estudios", "Personal", "Salud" };
-            EtiquetasSeleccionadas = new List<string>();
+            // Inicializamos la lista de etiquetas con objetos que tienen estado de selección
+            EtiquetasConSeleccion = new ObservableCollection<EtiquetaSeleccionada>(
+                new List<string> { "Trabajo", "Estudios", "Personal", "Salud" }
+                    .Select(e => new EtiquetaSeleccionada { Nombre = e, Seleccionada = false })
+            );
 
-            LimpiarEtiquetasCommand = new Command(() => EtiquetasSeleccionadas.Clear());
+            // ListaEtiquetas ya no es necesaria como List<string> separada
+            // Pero la mantenemos por si la usas en otro lugar
+            ListaEtiquetas = new ObservableCollection<string> { "Trabajo", "Estudios", "Personal", "Salud" };
+
+            // Comando para limpiar selecciones
+            LimpiarEtiquetasCommand = new Command(() =>
+            {
+                foreach (var etiqueta in EtiquetasConSeleccion)
+                {
+                    etiqueta.Seleccionada = false;
+                }
+            });
 
             AgTarea = new Command(GuardarTarea);
         }
 
-        // Método para guardar la tarea creada
+        // Método para manejar cambios en los CheckBox
+        public void OnEtiquetaCheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            var checkBox = (CheckBox)sender;
+            var etiqueta = checkBox.BindingContext as EtiquetaSeleccionada;
+
+            if (etiqueta != null)
+            {
+                etiqueta.Seleccionada = e.Value;
+            }
+        }
+
         private async void GuardarTarea()
         {
             if (string.IsNullOrWhiteSpace(AgTitulo) ||
                 string.IsNullOrWhiteSpace(AgDescripcion) ||
                 PrioridadSeleccionada == null ||
-                !EtiquetasSeleccionadas.Any())
+                !EtiquetasConSeleccion.Any(e => e.Seleccionada))
             {
                 await Shell.Current.DisplayAlert("Error", "Por favor, completa todos los campos", "Aceptar");
                 return;
@@ -69,10 +90,54 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 Descripcion = AgDescripcion,
                 Prioridad = PrioridadSeleccionada,
                 Estado = Estado ? "Finalizada" : "Pendiente",
-                Etiquetas = EtiquetasSeleccionadas.Select(titulo => new Etiqueta { Titulo = titulo }).ToList()
+                Etiquetas = EtiquetasConSeleccion
+                    .Where(e => e.Seleccionada)
+                    .Select(e => new Etiqueta { Titulo = e.Nombre })
+                    .ToList()
             };
 
             App.TareaRepositorio.SaveItem(nuevaTarea);
+            await Shell.Current.DisplayAlert("Éxito", "Tarea creada con éxito", "Aceptar");
+            LimpiarCampos();
+        }
+
+        private void LimpiarCampos()
+        {
+            AgTitulo = string.Empty;
+            AgDescripcion = string.Empty;
+            Estado = false;
+            foreach (var etiqueta in EtiquetasConSeleccion)
+            {
+                etiqueta.Seleccionada = false;
+            }
+            PrioridadSeleccionada = ListaPrioridades[1];
+        }
+    }
+
+    // Clase auxiliar para manejar el estado de selección de cada etiqueta
+    public class EtiquetaSeleccionada : INotifyPropertyChanged
+    {
+        public string Nombre { get; set; }
+
+        private bool _seleccionada;
+        public bool Seleccionada
+        {
+            get => _seleccionada;
+            set
+            {
+                if (_seleccionada != value)
+                {
+                    _seleccionada = value;
+                    OnPropertyChanged(nameof(Seleccionada));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
