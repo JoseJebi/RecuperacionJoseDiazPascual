@@ -15,7 +15,11 @@ namespace RecuperacionJoseDiazPascual
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            TareaRepositorio = objTareaRepo;
+            EtiquetaRepositorio = objEtiquetaRepo;
+            EtiquetasTareaRepositorio = objEtiquetasTareaRepo;
+
+            MainPage = new AgregarView();
         }
     }
 }

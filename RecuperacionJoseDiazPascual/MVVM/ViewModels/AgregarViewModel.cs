@@ -45,10 +45,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                     .Select(e => new EtiquetaSeleccionada { Nombre = e, Seleccionada = false })
             );
 
-            // ListaEtiquetas ya no es necesaria como List<string> separada
-            // Pero la mantenemos por si la usas en otro lugar
-            ListaEtiquetas = new ObservableCollection<string> { "Trabajo", "Estudios", "Personal", "Salud" };
-
             // Comando para limpiar selecciones
             LimpiarEtiquetasCommand = new Command(() =>
             {
@@ -80,7 +76,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 PrioridadSeleccionada == null ||
                 !EtiquetasConSeleccion.Any(e => e.Seleccionada))
             {
-                await Shell.Current.DisplayAlert("Error", "Por favor, completa todos los campos", "Aceptar");
+                await Application.Current.MainPage.DisplayAlert("Error", "Por favor, completa todos los campos", "Aceptar");
                 return;
             }
 
@@ -97,7 +93,8 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             };
 
             App.TareaRepositorio.SaveItem(nuevaTarea);
-            await Shell.Current.DisplayAlert("Éxito", "Tarea creada con éxito", "Aceptar");
+            await Application.Current.MainPage.DisplayAlert("Éxito", "Tarea creada con éxito", "Aceptar");
+
             LimpiarCampos();
         }
 
