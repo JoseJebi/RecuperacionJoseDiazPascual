@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -18,6 +19,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public bool IsRefreshing { get; set; }
         public ICommand RefreshCommand { get; set; }
         public ICommand AgregarCommand { get; set; }
+        public ICommand CompletarTareaCommand { get; set; }
 
         public PrinicipalViewModel()
         {
@@ -29,6 +31,15 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 {
                     await navigationPage.PushAsync(new AgregarView());
                 }
+            });
+
+            CompletarTareaCommand = new Command<Tarea>(async (tarea) =>
+            {
+                if (tarea == null) return;
+
+                tarea.Estado = "Completada";
+                App.TareaRepositorio.SaveItem(tarea);
+                RefrescarTareas();
             });
 
             Tareas = new ObservableCollection<Tarea>();

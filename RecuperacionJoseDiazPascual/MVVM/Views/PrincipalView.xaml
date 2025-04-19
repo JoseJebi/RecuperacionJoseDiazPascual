@@ -12,11 +12,21 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Padding="10">
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Titulo}"/>
-                                    <Label Text="{Binding Descripcion}"/>
-                                    <Label Text="{Binding Estado}"/>
-                                    <Label Text="{Binding EtiquetasString}"/>
+                                <StackLayout>
+                                    <Label Text="{Binding Titulo}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Descripcion}" />
+                                    <Label Text="{Binding Estado}" />
+                                    <Label Text="{Binding EtiquetasString}" />
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10" Margin="0,10,0,0">
+                                        <!--
+                                        <Button Text="Editar"
+                                                Command="{Binding BindingContext.EditarTareaCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}" /> -->
+
+                                        <Button Text="Completar"
+                                                Command="{Binding BindingContext.CompletarTareaCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                CommandParameter="{Binding .}" />
+                                    </StackLayout>
                                 </StackLayout>
                             </Frame>
                         </DataTemplate>
