@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecuperacionJoseDiazPascual.MVVM.Views.GestionEtiquetasView"
+             Title="GestionEtiquetasView">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label Text="Gestión de Etiquetas"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Entry para nombre de etiqueta nueva o editada -->
+            <Entry x:Name="NombreEtiquetaEntry"
+                   Placeholder="Nombre de la etiqueta"
+                   FontSize="16" />
+
+            <!-- Botón para guardar (agregar o actualizar) -->
+            <Button Text="Guardar"
+                    Command="{Binding GuardarEtiquetaCommand}"
+                    BackgroundColor="Green"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+
+            <Label Text="Etiquetas Disponibles"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   Margin="0,20,0,10" />
+
+            <!-- Lista de etiquetas con botones para editar y eliminar -->
+            <CollectionView ItemsSource="{Binding ListaEtiquetas}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="Gray" CornerRadius="10" Padding="10">
+                            <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="15">
+                                <Label Text="{Binding Titulo}" VerticalOptions="Center" FontSize="16" />
+                                <Button Text="Editar"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="DodgerBlue"
+                                        TextColor="White"
+                                        WidthRequest="70" />
+                                <Button Text="Eliminar"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="Red"
+                                        TextColor="White"
+                                        WidthRequest="80" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Botón para volver -->
+            <Button Text="←"
+                    Command="{Binding VolverAgregarTarea}"
+                    FontSize="24"
+                    WidthRequest="60"
+                    HeightRequest="60"
+                    TextColor="White"
+                    CornerRadius="30"
+                    HorizontalOptions="Start"
+                    VerticalOptions="End"
+                    Margin="20" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

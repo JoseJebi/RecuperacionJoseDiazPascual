@@ -36,6 +36,15 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
+                    <Button Text="Gestionar etiquetas"
+                            Command="{Binding GestionEtiquetas}" 
+                            BackgroundColor="{StaticResource Primary}"
+                            FontSize="19"
+                            TextColor="White"
+                            CornerRadius="10"
+                            Padding="10,5"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center"/>
                 </VerticalStackLayout>
             </Frame>
 

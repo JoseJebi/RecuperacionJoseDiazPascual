@@ -1,5 +1,6 @@
 ﻿using PropertyChanged;
 using RecuperacionJoseDiazPascual.MVVM.Models;
+using RecuperacionJoseDiazPascual.MVVM.Views;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
         public ICommand AgTarea { get; }
         public ICommand VolverPaginaPrincipal { get; }
+        public ICommand GestionEtiquetas { get; }
         public string? AgTitulo { get; set; }
         public string? AgDescripcion { get; set; }
         public bool Estado { get; set; }
@@ -58,6 +60,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
             AgTarea = new Command(GuardarTarea);
             VolverPaginaPrincipal = new Command(Volver);
+            GestionEtiquetas = new Command(GestEtiquetas);
         }
 
         public AgregarViewModel(Tarea tarea)
@@ -94,6 +97,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
             AgTarea = new Command(GuardarTarea);
             VolverPaginaPrincipal = new Command(Volver);
+            GestionEtiquetas = new Command(GestEtiquetas);
         }
 
         // Método para manejar cambios en los CheckBox
@@ -158,6 +162,14 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         private async void Volver()
         {
             await Application.Current.MainPage.Navigation.PopAsync();
+        }
+
+        private async void GestEtiquetas()
+        {
+            if (Application.Current.MainPage is NavigationPage navigationPage)
+            {
+                await navigationPage.PushAsync(new GestionEtiquetasView());
+            }
         }
 
         private void LimpiarCampos()
