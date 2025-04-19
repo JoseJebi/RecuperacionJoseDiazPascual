@@ -19,7 +19,7 @@ namespace RecuperacionJoseDiazPascual
             EtiquetaRepositorio = objEtiquetaRepo;
             EtiquetasTareaRepositorio = objEtiquetasTareaRepo;
 
-            MainPage = new AgregarView();
+            MainPage = new NavigationPage(new PrincipalView());
         }
     }
 }

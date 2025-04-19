@@ -16,11 +16,23 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
     {
         public ObservableCollection<Tarea> Tareas { get; set; }
         public bool IsRefreshing { get; set; }
-        public ICommand RefreshCommand { get; }
+        public ICommand RefreshCommand { get; set; }
+        public ICommand AgregarCommand { get; set; }
 
         public PrinicipalViewModel()
         {
             RefreshCommand = new Command(async () => await RefrescarTareas());
+
+            AgregarCommand = new Command(async () =>
+            {
+                if (Application.Current.MainPage is NavigationPage navigationPage)
+                {
+                    await navigationPage.PushAsync(new AgregarView());
+                }
+            });
+
+            Tareas = new ObservableCollection<Tarea>();
+            CargarTareas();
         }
 
         private void CargarTareas()
