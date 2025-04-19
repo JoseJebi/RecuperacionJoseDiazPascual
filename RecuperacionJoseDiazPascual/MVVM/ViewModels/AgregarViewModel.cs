@@ -28,6 +28,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public ObservableCollection<EtiquetaSeleccionada> EtiquetasConSeleccion { get; set; }
 
         public ICommand LimpiarEtiquetasCommand { get; }
+        private Tarea tareaEditando;
 
         // Propiedad calculada para mostrar las etiquetas seleccionadas
         public string EtiquetasSeleccionadasString =>
@@ -47,6 +48,42 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             );
 
             // Comando para limpiar selecciones
+            LimpiarEtiquetasCommand = new Command(() =>
+            {
+                foreach (var etiqueta in EtiquetasConSeleccion)
+                {
+                    etiqueta.Seleccionada = false;
+                }
+            });
+
+            AgTarea = new Command(GuardarTarea);
+            VolverPaginaPrincipal = new Command(Volver);
+        }
+
+        public AgregarViewModel(Tarea tarea)
+        {
+            tareaEditando = tarea;
+
+            // Inicializar campos desde la tarea
+            AgTitulo = tarea.Titulo;
+            AgDescripcion = tarea.Descripcion;
+            Estado = tarea.Estado == "Finalizada";
+
+            ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
+            PrioridadSeleccionada = tarea.Prioridad;
+
+            // Etiquetas posibles
+            var etiquetasPosibles = new List<string> { "Trabajo", "Estudios", "Personal", "Salud" };
+
+            EtiquetasConSeleccion = new ObservableCollection<EtiquetaSeleccionada>(
+                etiquetasPosibles.Select(nombre =>
+                    new EtiquetaSeleccionada
+                    {
+                        Nombre = nombre,
+                        Seleccionada = tarea.Etiquetas?.Any(et => et.Titulo == nombre) == true
+                    })
+            );
+
             LimpiarEtiquetasCommand = new Command(() =>
             {
                 foreach (var etiqueta in EtiquetasConSeleccion)
@@ -82,20 +119,38 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 return;
             }
 
-            var nuevaTarea = new Tarea
+            if (tareaEditando != null)      //Si estamos EDITANDO una tarea que ya existe pasa esto
             {
-                Titulo = AgTitulo,
-                Descripcion = AgDescripcion,
-                Prioridad = PrioridadSeleccionada,
-                Estado = Estado ? "Finalizada" : "Pendiente",
-                Etiquetas = EtiquetasConSeleccion
+                tareaEditando.Titulo = AgTitulo;
+                tareaEditando.Descripcion = AgDescripcion;
+                tareaEditando.Prioridad = PrioridadSeleccionada;
+                tareaEditando.Estado = Estado ? "Finalizada" : "Pendiente";
+                tareaEditando.Etiquetas = EtiquetasConSeleccion
+                    .Where(e => e.Seleccionada)
+                    .Select(e => new Etiqueta { Titulo = e.Nombre })
+                    .ToList();
+
+                App.TareaRepositorio.SaveItem(tareaEditando);
+                await Application.Current.MainPage.DisplayAlert("Éxito", "Tarea editada con éxito", "Aceptar");
+            }
+
+            else
+            {       //Si estamos CREANDO una nueva tarea pasa esto
+                var nuevaTarea = new Tarea
+                {
+                    Titulo = AgTitulo,
+                    Descripcion = AgDescripcion,
+                    Prioridad = PrioridadSeleccionada,
+                    Estado = Estado ? "Finalizada" : "Pendiente",
+                    Etiquetas = EtiquetasConSeleccion
                     .Where(e => e.Seleccionada)
                     .Select(e => new Etiqueta { Titulo = e.Nombre })
                     .ToList()
-            };
+                };
 
-            App.TareaRepositorio.SaveItem(nuevaTarea);
-            await Application.Current.MainPage.DisplayAlert("Éxito", "Tarea creada con éxito", "Aceptar");
+                App.TareaRepositorio.SaveItem(nuevaTarea);
+                await Application.Current.MainPage.DisplayAlert("Éxito", "Tarea creada con éxito", "Aceptar");
+            }
 
             LimpiarCampos();
         }

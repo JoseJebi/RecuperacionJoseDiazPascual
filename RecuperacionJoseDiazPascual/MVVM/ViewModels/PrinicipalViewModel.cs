@@ -20,6 +20,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public ICommand RefreshCommand { get; set; }
         public ICommand AgregarCommand { get; set; }
         public ICommand CompletarTareaCommand { get; set; }
+        public ICommand EditarTareaCommand { get; set; }
 
         public PrinicipalViewModel()
         {
@@ -30,6 +31,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 if (Application.Current.MainPage is NavigationPage navigationPage)
                 {
                     await navigationPage.PushAsync(new AgregarView());
+                    RefrescarTareas();
                 }
             });
 
@@ -37,9 +39,18 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             {
                 if (tarea == null) return;
 
-                tarea.Estado = "Completada";
+                tarea.Estado = "Finalizada";
                 App.TareaRepositorio.SaveItem(tarea);
                 RefrescarTareas();
+            });
+
+            EditarTareaCommand = new Command<Tarea>(async (tarea) =>
+            {
+                if (Application.Current.MainPage is NavigationPage navigationPage)
+                {
+                    await navigationPage.PushAsync(new AgregarView(tarea));
+                    RefrescarTareas();
+                }
             });
 
             Tareas = new ObservableCollection<Tarea>();
