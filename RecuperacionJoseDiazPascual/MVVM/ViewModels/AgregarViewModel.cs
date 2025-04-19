@@ -13,6 +13,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
     {
 
         public ICommand AgTarea { get; }
+        public ICommand VolverPaginaPrincipal { get; }
         public string? AgTitulo { get; set; }
         public string? AgDescripcion { get; set; }
         public bool Estado { get; set; }
@@ -55,6 +56,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             });
 
             AgTarea = new Command(GuardarTarea);
+            VolverPaginaPrincipal = new Command(Volver);
         }
 
         // Método para manejar cambios en los CheckBox
@@ -96,6 +98,11 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             await Application.Current.MainPage.DisplayAlert("Éxito", "Tarea creada con éxito", "Aceptar");
 
             LimpiarCampos();
+        }
+
+        private async void Volver()
+        {
+            await Application.Current.MainPage.Navigation.PopAsync();
         }
 
         private void LimpiarCampos()
