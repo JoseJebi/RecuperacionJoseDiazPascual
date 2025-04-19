@@ -12,6 +12,7 @@ public partial class AgregarView : ContentPage
 		BindingContext = new AgregarViewModel();
 	}
 
+    /* Constructor secundario para abrir una tarea ya creada y poder aditarla */
     public AgregarView(Tarea tarea)
     {
         InitializeComponent();

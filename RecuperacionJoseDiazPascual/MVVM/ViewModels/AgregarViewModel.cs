@@ -12,10 +12,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class AgregarViewModel
     {
-
-        public ICommand AgTarea { get; }
-        public ICommand VolverPaginaPrincipal { get; }
-        public ICommand GestionEtiquetas { get; }
         public string? AgTitulo { get; set; }
         public string? AgDescripcion { get; set; }
         public bool Estado { get; set; }
@@ -29,6 +25,11 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         // Modelo para manejar las etiquetas seleccionadas
         public ObservableCollection<EtiquetaSeleccionada> EtiquetasConSeleccion { get; set; }
 
+
+        // Comandos
+        public ICommand AgTarea { get; }
+        public ICommand VolverPaginaPrincipal { get; }
+        public ICommand GestionEtiquetas { get; }
         public ICommand LimpiarEtiquetasCommand { get; }
         private Tarea tareaEditando;
 
@@ -45,7 +46,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
             // Inicializamos la lista de etiquetas con objetos que tienen estado de selección
             EtiquetasConSeleccion = new ObservableCollection<EtiquetaSeleccionada>(
-                new List<string> { "Trabajo", "Estudios", "Personal", "Salud" }
+                new List<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" }
                     .Select(e => new EtiquetaSeleccionada { Nombre = e, Seleccionada = false })
             );
 
@@ -75,11 +76,10 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
             PrioridadSeleccionada = tarea.Prioridad;
 
-            // Etiquetas posibles
-            var etiquetasPosibles = new List<string> { "Trabajo", "Estudios", "Personal", "Salud" };
+            var etiquetas = new List<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" };
 
             EtiquetasConSeleccion = new ObservableCollection<EtiquetaSeleccionada>(
-                etiquetasPosibles.Select(nombre =>
+                etiquetas.Select(nombre =>
                     new EtiquetaSeleccionada
                     {
                         Nombre = nombre,
