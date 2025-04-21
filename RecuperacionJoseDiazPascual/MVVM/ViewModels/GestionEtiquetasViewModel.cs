@@ -1,85 +1,83 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using PropertyChanged;
-using Microsoft.Maui.Controls;
-using System.Collections.ObjectModel;
 
-namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
+public class GestionEtiquetasViewModel
 {
-    [AddINotifyPropertyChangedInterface]
-    public class GestionEtiquetasViewModel
+    private readonly List<string> _listaOriginal;
+    private readonly Action<List<string>> _onEtiquetasActualizadas;
+
+    public ObservableCollection<string> ListaEtiquetas { get; set; }
+    public string NombreEtiqueta { get; set; }
+    public string EtiquetaSeleccionada { get; set; }
+
+    public ICommand VolverAgregarTarea { get; }
+    public ICommand GuardarEtiquetaCommand { get; }
+    public ICommand EditarEtiquetaCommand { get; }
+    public ICommand EliminarEtiquetaCommand { get; }
+
+    public GestionEtiquetasViewModel(ObservableCollection<string> etiquetas, Action<List<string>> onEtiquetasActualizadas)
     {
-        public ObservableCollection<string> ListaEtiquetas { get; set; }
-        private ObservableCollection<string> _listaOriginal;
-        public string NombreEtiqueta { get; set; }
-        public string EtiquetaSeleccionada { get; set; }
+        ListaEtiquetas = new ObservableCollection<string>(etiquetas);
+        _listaOriginal = new List<string>(etiquetas);
+        _onEtiquetasActualizadas = onEtiquetasActualizadas;
 
-        public ICommand VolverAgregarTarea { get; }
-        public ICommand GuardarEtiquetaCommand { get; }
-        public ICommand EditarEtiquetaCommand { get; }
-        public ICommand EliminarEtiquetaCommand { get; }
+        VolverAgregarTarea = new Command(Volver);
+        GuardarEtiquetaCommand = new Command(GuardarEtiqueta);
+        EditarEtiquetaCommand = new Command<string>(EditarEtiqueta);
+        EliminarEtiquetaCommand = new Command<string>(EliminarEtiqueta);
+    }
 
-        public GestionEtiquetasViewModel()
+    public void GuardarEtiqueta()
+    {
+        if (!string.IsNullOrWhiteSpace(NombreEtiqueta))
         {
-            ListaEtiquetas = new ObservableCollection<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" };
-            _listaOriginal = new ObservableCollection<string>(ListaEtiquetas);
-
-            VolverAgregarTarea = new Command(Volver);
-            GuardarEtiquetaCommand = new Command(GuardarEtiqueta);
-            EditarEtiquetaCommand = new Command<string>(EditarEtiqueta);
-            EliminarEtiquetaCommand = new Command<string>(EliminarEtiqueta);
-        }
-
-        public void GuardarEtiqueta()
-        {
-            if (!string.IsNullOrWhiteSpace(NombreEtiqueta))
+            if (!string.IsNullOrEmpty(EtiquetaSeleccionada))
             {
-                if (!string.IsNullOrEmpty(EtiquetaSeleccionada))
+                int index = ListaEtiquetas.IndexOf(EtiquetaSeleccionada);
+                if (index != -1)
                 {
-                    int index = ListaEtiquetas.IndexOf(EtiquetaSeleccionada);
-                    if (index != -1)
-                    {
-                        ListaEtiquetas[index] = NombreEtiqueta;
-                    }
+                    ListaEtiquetas[index] = NombreEtiqueta;
                 }
-                else if (!ListaEtiquetas.Contains(NombreEtiqueta))
-                {
-                    ListaEtiquetas.Add(NombreEtiqueta);
-                }
-
-                NombreEtiqueta = string.Empty;
-                EtiquetaSeleccionada = string.Empty;
             }
-        }
-
-        public void EditarEtiqueta(string etiqueta)
-        {
-            NombreEtiqueta = etiqueta;
-            EtiquetaSeleccionada = etiqueta;
-        }
-
-        public void EliminarEtiqueta(string etiqueta)
-        {
-            if (ListaEtiquetas.Contains(etiqueta))
+            else if (!ListaEtiquetas.Contains(NombreEtiqueta))
             {
-                ListaEtiquetas.Remove(etiqueta);
+                ListaEtiquetas.Add(NombreEtiqueta);
             }
-        }
 
-        public async void Volver()
+            NombreEtiqueta = string.Empty;
+            EtiquetaSeleccionada = string.Empty;
+        }
+    }
+
+    public void EditarEtiqueta(string etiqueta)
+    {
+        NombreEtiqueta = etiqueta;
+        EtiquetaSeleccionada = etiqueta;
+    }
+
+    public void EliminarEtiqueta(string etiqueta)
+    {
+        if (ListaEtiquetas.Contains(etiqueta))
         {
-            if (!ListaEtiquetas.SequenceEqual(_listaOriginal))
-            {
-                bool respuesta = await Application.Current.MainPage.DisplayAlert(
-                    "Cambios detectados",
-                    "¿Deseas conservar los cambios en las etiquetas?",
-                    "Sí", "No");
-            }
-
-            await Application.Current.MainPage.Navigation.PopAsync();
+            ListaEtiquetas.Remove(etiqueta);
         }
+    }
+
+    public async void Volver()
+    {
+        if (!ListaEtiquetas.SequenceEqual(_listaOriginal))
+        {
+            bool respuesta = await Application.Current.MainPage.DisplayAlert(
+                "Cambios detectados",
+                "¿Deseas conservar los cambios en las etiquetas?",
+                "Sí", "No");
+
+            if (respuesta)
+            {
+                _onEtiquetasActualizadas.Invoke(ListaEtiquetas.ToList());
+            }
+        }
+
+        await Application.Current.MainPage.Navigation.PopAsync();
     }
 }

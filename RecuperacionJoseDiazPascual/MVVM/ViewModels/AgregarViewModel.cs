@@ -100,18 +100,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             GestionEtiquetas = new Command(GestEtiquetas);
         }
 
-        // Método para manejar cambios en los CheckBox
-        public void OnEtiquetaCheckedChanged(object sender, CheckedChangedEventArgs e)
-        {
-            var checkBox = (CheckBox)sender;
-            var etiqueta = checkBox.BindingContext as EtiquetaSeleccionada;
-
-            if (etiqueta != null)
-            {
-                etiqueta.Seleccionada = e.Value;
-            }
-        }
-
         private async void GuardarTarea()
         {
             if (string.IsNullOrWhiteSpace(AgTitulo) ||
@@ -166,11 +154,25 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
         private async void GestEtiquetas()
         {
-            if (Application.Current.MainPage is NavigationPage navigationPage)
-            {
-                await navigationPage.PushAsync(new GestionEtiquetasView());
-            }
+            var etiquetasActuales = new ObservableCollection<string>(
+                EtiquetasConSeleccion.Select(e => e.Nombre)
+            );
+
+            await Application.Current.MainPage.Navigation.PushAsync(
+                new GestionEtiquetasView(etiquetasActuales, etiquetasActualizadas =>
+                {
+                    // Se actualizan las etiquetas con lo que venga de la otra vista
+                    EtiquetasConSeleccion = new ObservableCollection<EtiquetaSeleccionada>(
+                        etiquetasActualizadas.Select(e => new EtiquetaSeleccionada
+                        {
+                            Nombre = e,
+                            Seleccionada = false 
+                        })
+                    );
+                })
+            );
         }
+
 
         private void LimpiarCampos()
         {
