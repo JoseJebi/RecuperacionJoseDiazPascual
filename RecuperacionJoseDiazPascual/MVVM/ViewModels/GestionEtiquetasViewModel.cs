@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using PropertyChanged;
 using Microsoft.Maui.Controls;
+using System.Collections.ObjectModel;
+
 
 namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 {
@@ -12,7 +14,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
     public class GestionEtiquetasViewModel
     {
         // Propiedades
-        public List<string> ListaEtiquetas { get; set; }
+        public ObservableCollection<string> ListaEtiquetas { get; set; }
         public string NombreEtiqueta { get; set; } 
         public string EtiquetaSeleccionada { get; set; } 
 
@@ -25,7 +27,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public GestionEtiquetasViewModel()
         {
             // Inicializa la lista con tus etiquetas predefinidas
-            ListaEtiquetas = new List<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" };
+            ListaEtiquetas = new ObservableCollection<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" };
 
             // Comandos
             VolverAgregarTarea = new Command(Volver);
@@ -34,6 +36,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             EliminarEtiquetaCommand = new Command<string>(EliminarEtiqueta);
         }
 
+        // Guarda la etiqueta creada
         public void GuardarEtiqueta()
         {
             if (!string.IsNullOrWhiteSpace(NombreEtiqueta))
@@ -59,14 +62,14 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             }
         }
 
-        private void EditarEtiqueta(string etiqueta)
+        public void EditarEtiqueta(string etiqueta)
         {
             // Carga la etiqueta en el Entry para editar
             NombreEtiqueta = etiqueta;
             EtiquetaSeleccionada = etiqueta;
         }
 
-        private void EliminarEtiqueta(string etiqueta)
+        public void EliminarEtiqueta(string etiqueta)
         {
             if (ListaEtiquetas.Contains(etiqueta))
             {
@@ -74,7 +77,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             }
         }
 
-        private async void Volver()
+        public async void Volver()
         {
             await Application.Current.MainPage.Navigation.PopAsync();
         }

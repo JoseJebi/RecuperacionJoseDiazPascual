@@ -12,6 +12,7 @@
 
             <!-- Entry para nombre de etiqueta nueva o editada -->
             <Entry x:Name="NombreEtiquetaEntry"
+                   Text="{Binding NombreEtiqueta}"
                    Placeholder="Nombre de la etiqueta"
                    FontSize="16" />
 
@@ -32,14 +33,14 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame BorderColor="Gray" CornerRadius="10" Padding="10">
-                            <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="15">
-                                <Label Text="{Binding Titulo}" VerticalOptions="Center" FontSize="16" />
-                                <Button Text="Editar"
+                            <HorizontalStackLayout Spacing="15">
+                                <Label Text="{Binding .}" VerticalOptions="Center" FontSize="16" />
+                                <Button Command="{Binding BindingContext.EditarEtiquetaCommand, Source={x:Reference NombreEtiquetaEntry}}"
                                         CommandParameter="{Binding .}"
                                         BackgroundColor="DodgerBlue"
                                         TextColor="White"
                                         WidthRequest="70" />
-                                <Button Text="Eliminar"
+                                <Button Command="{Binding BindingContext.EliminarEtiquetaCommand, Source={x:Reference NombreEtiquetaEntry}}"
                                         CommandParameter="{Binding .}"
                                         BackgroundColor="Red"
                                         TextColor="White"
