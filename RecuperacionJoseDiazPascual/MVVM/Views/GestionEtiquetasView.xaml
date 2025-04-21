@@ -33,19 +33,25 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame BorderColor="Gray" CornerRadius="10" Padding="10">
-                            <HorizontalStackLayout Spacing="15">
-                                <Label Text="{Binding .}" VerticalOptions="Center" FontSize="16" />
-                                <Button Command="{Binding BindingContext.EditarEtiquetaCommand, Source={x:Reference NombreEtiquetaEntry}}"
-                                        CommandParameter="{Binding .}"
-                                        BackgroundColor="DodgerBlue"
-                                        TextColor="White"
-                                        WidthRequest="70" />
-                                <Button Command="{Binding BindingContext.EliminarEtiquetaCommand, Source={x:Reference NombreEtiquetaEntry}}"
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding .}" 
+                                       VerticalOptions="Center" 
+                                       FontSize="16"
+                                       Grid.Column="0"
+                                       HorizontalOptions="Start" />
+                                <Button Text="Eliminar"
+                                        Command="{Binding BindingContext.EliminarEtiquetaCommand, Source={x:Reference NombreEtiquetaEntry}}"
                                         CommandParameter="{Binding .}"
                                         BackgroundColor="Red"
                                         TextColor="White"
-                                        WidthRequest="80" />
-                            </HorizontalStackLayout>
+                                        WidthRequest="80"
+                                        Grid.Column="1"
+                                        HorizontalOptions="End" />
+                            </Grid>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

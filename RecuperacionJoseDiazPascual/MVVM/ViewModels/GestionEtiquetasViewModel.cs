@@ -7,18 +7,16 @@ using PropertyChanged;
 using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 
-
 namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
     public class GestionEtiquetasViewModel
     {
-        // Propiedades
         public ObservableCollection<string> ListaEtiquetas { get; set; }
-        public string NombreEtiqueta { get; set; } 
-        public string EtiquetaSeleccionada { get; set; } 
+        private ObservableCollection<string> _listaOriginal;
+        public string NombreEtiqueta { get; set; }
+        public string EtiquetaSeleccionada { get; set; }
 
-        // Comandos
         public ICommand VolverAgregarTarea { get; }
         public ICommand GuardarEtiquetaCommand { get; }
         public ICommand EditarEtiquetaCommand { get; }
@@ -26,22 +24,19 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
         public GestionEtiquetasViewModel()
         {
-            // Inicializa la lista con tus etiquetas predefinidas
             ListaEtiquetas = new ObservableCollection<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" };
+            _listaOriginal = new ObservableCollection<string>(ListaEtiquetas);
 
-            // Comandos
             VolverAgregarTarea = new Command(Volver);
             GuardarEtiquetaCommand = new Command(GuardarEtiqueta);
             EditarEtiquetaCommand = new Command<string>(EditarEtiqueta);
             EliminarEtiquetaCommand = new Command<string>(EliminarEtiqueta);
         }
 
-        // Guarda la etiqueta creada
         public void GuardarEtiqueta()
         {
             if (!string.IsNullOrWhiteSpace(NombreEtiqueta))
             {
-                // Modo edición (reemplaza la etiqueta seleccionada)
                 if (!string.IsNullOrEmpty(EtiquetaSeleccionada))
                 {
                     int index = ListaEtiquetas.IndexOf(EtiquetaSeleccionada);
@@ -50,13 +45,11 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                         ListaEtiquetas[index] = NombreEtiqueta;
                     }
                 }
-                // Modo añadir (solo si no existe)
                 else if (!ListaEtiquetas.Contains(NombreEtiqueta))
                 {
                     ListaEtiquetas.Add(NombreEtiqueta);
                 }
 
-                // Limpia el Entry y la selección
                 NombreEtiqueta = string.Empty;
                 EtiquetaSeleccionada = string.Empty;
             }
@@ -64,7 +57,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
         public void EditarEtiqueta(string etiqueta)
         {
-            // Carga la etiqueta en el Entry para editar
             NombreEtiqueta = etiqueta;
             EtiquetaSeleccionada = etiqueta;
         }
@@ -79,6 +71,14 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
         public async void Volver()
         {
+            if (!ListaEtiquetas.SequenceEqual(_listaOriginal))
+            {
+                bool respuesta = await Application.Current.MainPage.DisplayAlert(
+                    "Cambios detectados",
+                    "¿Deseas conservar los cambios en las etiquetas?",
+                    "Sí", "No");
+            }
+
             await Application.Current.MainPage.Navigation.PopAsync();
         }
     }
