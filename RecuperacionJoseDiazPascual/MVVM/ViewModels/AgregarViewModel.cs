@@ -20,7 +20,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public string PrioridadSeleccionada { get; set; }
 
         // Cambiamos a ObservableCollection para que la UI se actualice automáticamente
-        public ObservableCollection<string> ListaEtiquetas { get; set; }
+        public ObservableCollection<Etiqueta> ListaEtiquetas { get; set; }
 
 
         // Comandos
@@ -34,6 +34,9 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         {
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
             PrioridadSeleccionada = ListaPrioridades[1];
+
+            ListaEtiquetas = new ObservableCollection<Etiqueta>(App.EtiquetaRepositorio.GetItems());
+
 
             AgTarea = new Command(GuardarTarea);
             VolverPaginaPrincipal = new Command(Volver);
