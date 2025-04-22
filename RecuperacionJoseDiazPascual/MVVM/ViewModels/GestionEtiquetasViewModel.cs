@@ -15,11 +15,8 @@ public class GestionEtiquetasViewModel
     public ICommand EditarEtiquetaCommand { get; }
     public ICommand EliminarEtiquetaCommand { get; }
 
-    public GestionEtiquetasViewModel(ObservableCollection<string> etiquetas, Action<List<string>> onEtiquetasActualizadas)
+    public GestionEtiquetasViewModel()
     {
-        ListaEtiquetas = new ObservableCollection<string>(etiquetas);
-        _listaOriginal = new List<string>(etiquetas);
-        _onEtiquetasActualizadas = onEtiquetasActualizadas;
 
         VolverAgregarTarea = new Command(Volver);
         GuardarEtiquetaCommand = new Command(GuardarEtiqueta);
@@ -65,19 +62,6 @@ public class GestionEtiquetasViewModel
 
     public async void Volver()
     {
-        if (!ListaEtiquetas.SequenceEqual(_listaOriginal))
-        {
-            bool respuesta = await Application.Current.MainPage.DisplayAlert(
-                "Cambios detectados",
-                "¿Deseas conservar los cambios en las etiquetas?",
-                "Sí", "No");
-
-            if (respuesta)
-            {
-                _onEtiquetasActualizadas.Invoke(ListaEtiquetas.ToList());
-            }
-        }
-
         await Application.Current.MainPage.Navigation.PopAsync();
     }
 }

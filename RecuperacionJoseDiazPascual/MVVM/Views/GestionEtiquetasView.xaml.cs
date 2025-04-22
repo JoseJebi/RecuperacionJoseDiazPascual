@@ -5,10 +5,10 @@ namespace RecuperacionJoseDiazPascual.MVVM.Views;
 
 public partial class GestionEtiquetasView : ContentPage
 {
-	public GestionEtiquetasView(ObservableCollection<string> etiquetas, Action<List<string>> onEtiquetasActualizadas)
+	public GestionEtiquetasView()
 	{
 		InitializeComponent();
 
-		BindingContext = new GestionEtiquetasViewModel(etiquetas, onEtiquetasActualizadas);
+		BindingContext = new GestionEtiquetasViewModel();
 	}
 }

@@ -22,9 +22,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         // Cambiamos a ObservableCollection para que la UI se actualice automáticamente
         public ObservableCollection<string> ListaEtiquetas { get; set; }
 
-        // Modelo para manejar las etiquetas seleccionadas
-        public ObservableCollection<EtiquetaSeleccionada> EtiquetasConSeleccion { get; set; }
-
 
         // Comandos
         public ICommand AgTarea { get; }
@@ -33,31 +30,10 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public ICommand LimpiarEtiquetasCommand { get; }
         private Tarea tareaEditando;
 
-        // Propiedad calculada para mostrar las etiquetas seleccionadas
-        public string EtiquetasSeleccionadasString =>
-            EtiquetasConSeleccion.Any(e => e.Seleccionada)
-                ? string.Join(", ", EtiquetasConSeleccion.Where(e => e.Seleccionada).Select(e => e.Nombre))
-                : "Ninguna etiqueta seleccionada";
-
         public AgregarViewModel()
         {
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
             PrioridadSeleccionada = ListaPrioridades[1];
-
-            // Inicializamos la lista de etiquetas con objetos que tienen estado de selección
-            EtiquetasConSeleccion = new ObservableCollection<EtiquetaSeleccionada>(
-                new List<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" }
-                    .Select(e => new EtiquetaSeleccionada { Nombre = e, Seleccionada = false })
-            );
-
-            // Comando para limpiar selecciones
-            LimpiarEtiquetasCommand = new Command(() =>
-            {
-                foreach (var etiqueta in EtiquetasConSeleccion)
-                {
-                    etiqueta.Seleccionada = false;
-                }
-            });
 
             AgTarea = new Command(GuardarTarea);
             VolverPaginaPrincipal = new Command(Volver);
@@ -76,24 +52,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
             PrioridadSeleccionada = tarea.Prioridad;
 
-            var etiquetas = new List<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" };
-
-            EtiquetasConSeleccion = new ObservableCollection<EtiquetaSeleccionada>(
-                etiquetas.Select(nombre =>
-                    new EtiquetaSeleccionada
-                    {
-                        Nombre = nombre,
-                        Seleccionada = tarea.Etiquetas?.Any(et => et.Titulo == nombre) == true
-                    })
-            );
-
-            LimpiarEtiquetasCommand = new Command(() =>
-            {
-                foreach (var etiqueta in EtiquetasConSeleccion)
-                {
-                    etiqueta.Seleccionada = false;
-                }
-            });
 
             AgTarea = new Command(GuardarTarea);
             VolverPaginaPrincipal = new Command(Volver);
@@ -104,8 +62,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         {
             if (string.IsNullOrWhiteSpace(AgTitulo) ||
                 string.IsNullOrWhiteSpace(AgDescripcion) ||
-                PrioridadSeleccionada == null ||
-                !EtiquetasConSeleccion.Any(e => e.Seleccionada))
+                PrioridadSeleccionada == null)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", "Por favor, completa todos los campos", "Aceptar");
                 return;
@@ -117,10 +74,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 tareaEditando.Descripcion = AgDescripcion;
                 tareaEditando.Prioridad = PrioridadSeleccionada;
                 tareaEditando.Estado = Estado ? "Finalizada" : "Pendiente";
-                tareaEditando.Etiquetas = EtiquetasConSeleccion
-                    .Where(e => e.Seleccionada)
-                    .Select(e => new Etiqueta { Titulo = e.Nombre })
-                    .ToList();
 
                 App.TareaRepositorio.SaveItem(tareaEditando);
                 await Application.Current.MainPage.DisplayAlert("Éxito", "Tarea editada con éxito", "Aceptar");
@@ -133,11 +86,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                     Titulo = AgTitulo,
                     Descripcion = AgDescripcion,
                     Prioridad = PrioridadSeleccionada,
-                    Estado = Estado ? "Finalizada" : "Pendiente",
-                    Etiquetas = EtiquetasConSeleccion
-                    .Where(e => e.Seleccionada)
-                    .Select(e => new Etiqueta { Titulo = e.Nombre })
-                    .ToList()
+                    Estado = Estado ? "Finalizada" : "Pendiente"
                 };
 
                 App.TareaRepositorio.SaveItem(nuevaTarea);
@@ -154,22 +103,9 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
         private async void GestEtiquetas()
         {
-            var etiquetasActuales = new ObservableCollection<string>(
-                EtiquetasConSeleccion.Select(e => e.Nombre)
-            );
 
             await Application.Current.MainPage.Navigation.PushAsync(
-                new GestionEtiquetasView(etiquetasActuales, etiquetasActualizadas =>
-                {
-                    // Se actualizan las etiquetas con lo que venga de la otra vista
-                    EtiquetasConSeleccion = new ObservableCollection<EtiquetaSeleccionada>(
-                        etiquetasActualizadas.Select(e => new EtiquetaSeleccionada
-                        {
-                            Nombre = e,
-                            Seleccionada = false 
-                        })
-                    );
-                })
+                new GestionEtiquetasView()
             );
         }
 
@@ -179,10 +115,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             AgTitulo = string.Empty;
             AgDescripcion = string.Empty;
             Estado = false;
-            foreach (var etiqueta in EtiquetasConSeleccion)
-            {
-                etiqueta.Seleccionada = false;
-            }
             PrioridadSeleccionada = ListaPrioridades[1];
         }
     }
