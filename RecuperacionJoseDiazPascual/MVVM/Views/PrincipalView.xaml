@@ -5,9 +5,15 @@
              Title="PrincipalView">
 
     <Grid>
-        <StackLayout Padding="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="9*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackLayout Grid.Column="1" Padding="20">
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                    Command="{Binding RefreshCommand}">
+                         Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding Tareas}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -52,6 +58,7 @@
             Command="{Binding AgregarCommand}" />
 
         <Button
+            Grid.Column="2"
             Text="⟳"
             FontSize="20"
             WidthRequest="60"
