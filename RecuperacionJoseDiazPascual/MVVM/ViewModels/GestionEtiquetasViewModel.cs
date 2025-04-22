@@ -1,82 +1,74 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using PropertyChanged;
-using Microsoft.Maui.Controls;
+using RecuperacionJoseDiazPascual;
+using RecuperacionJoseDiazPascual.MVVM.Models;
 
-namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
+public class GestionEtiquetasViewModel
 {
-    [AddINotifyPropertyChangedInterface]
-    public class GestionEtiquetasViewModel
+    public ObservableCollection<Etiqueta> Etiqueta{ get; set; }
+    public string NombreEtiqueta { get; set; }
+
+    public ICommand VolverAgregarTarea { get; }
+    public ICommand GuardarEtiquetaCommand { get; }
+    public ICommand EditarEtiquetaCommand { get; }
+    public ICommand EliminarEtiquetaCommand { get; }
+
+    public GestionEtiquetasViewModel()
     {
-        // Propiedades
-        public List<string> ListaEtiquetas { get; set; }
-        public string NombreEtiqueta { get; set; } 
-        public string EtiquetaSeleccionada { get; set; } 
+        // Recojo las etiquetas existentes en la base de datos
+        Etiqueta = new ObservableCollection<Etiqueta>(App.EtiquetaRepositorio.GetItems());
 
-        // Comandos
-        public ICommand VolverAgregarTarea { get; }
-        public ICommand GuardarEtiquetaCommand { get; }
-        public ICommand EditarEtiquetaCommand { get; }
-        public ICommand EliminarEtiquetaCommand { get; }
+        VolverAgregarTarea = new Command(Volver);
+        GuardarEtiquetaCommand = new Command(GuardarEtiqueta);
+        EditarEtiquetaCommand = new Command<string>(EditarEtiqueta);
+        EliminarEtiquetaCommand = new Command<string>(EliminarEtiqueta);
+    }
 
-        public GestionEtiquetasViewModel()
+    public void GuardarEtiqueta()
+    {
+        if (!string.IsNullOrWhiteSpace(NombreEtiqueta))
         {
-            // Inicializa la lista con tus etiquetas predefinidas
-            ListaEtiquetas = new List<string> { "Trabajo", "Estudios", "Personal", "Salud", "Compras", "Viajes", "Ocio", "Mantenimiento" };
+            bool existe = Etiqueta.Any(e => e.Titulo == NombreEtiqueta);
 
-            // Comandos
-            VolverAgregarTarea = new Command(Volver);
-            GuardarEtiquetaCommand = new Command(GuardarEtiqueta);
-            EditarEtiquetaCommand = new Command<string>(EditarEtiqueta);
-            EliminarEtiquetaCommand = new Command<string>(EliminarEtiqueta);
-        }
-
-        public void GuardarEtiqueta()
-        {
-            if (!string.IsNullOrWhiteSpace(NombreEtiqueta))
+            if (existe)
             {
-                // Modo edición (reemplaza la etiqueta seleccionada)
-                if (!string.IsNullOrEmpty(EtiquetaSeleccionada))
-                {
-                    int index = ListaEtiquetas.IndexOf(EtiquetaSeleccionada);
-                    if (index != -1)
-                    {
-                        ListaEtiquetas[index] = NombreEtiqueta;
-                    }
-                }
-                // Modo añadir (solo si no existe)
-                else if (!ListaEtiquetas.Contains(NombreEtiqueta))
-                {
-                    ListaEtiquetas.Add(NombreEtiqueta);
-                }
-
-                // Limpia el Entry y la selección
+                Application.Current.MainPage.DisplayAlert(
+                    "Aviso",
+                    "La etiqueta ya existe.",
+                    "Aceptar"
+                );
+            }
+            else
+            {
+                var etiqueta = new Etiqueta { Titulo = NombreEtiqueta };
+                App.EtiquetaRepositorio.SaveItem(etiqueta);
+                Etiqueta.Add(etiqueta);
                 NombreEtiqueta = string.Empty;
-                EtiquetaSeleccionada = string.Empty;
             }
         }
-
-        private void EditarEtiqueta(string etiqueta)
+        else
         {
-            // Carga la etiqueta en el Entry para editar
-            NombreEtiqueta = etiqueta;
-            EtiquetaSeleccionada = etiqueta;
+            Application.Current.MainPage.DisplayAlert(
+                "Aviso",
+                "El nombre de la etiqueta no puede estar vacío.",
+                "Aceptar"
+            );
         }
 
-        private void EliminarEtiqueta(string etiqueta)
-        {
-            if (ListaEtiquetas.Contains(etiqueta))
-            {
-                ListaEtiquetas.Remove(etiqueta);
-            }
-        }
+    }
 
-        private async void Volver()
-        {
-            await Application.Current.MainPage.Navigation.PopAsync();
-        }
+    public void EditarEtiqueta(string etiqueta)
+    {
+        
+    }
+
+    public void EliminarEtiqueta(string etiqueta)
+    {
+        
+    }
+
+    public async void Volver()
+    {
+        await Application.Current.MainPage.Navigation.PopAsync();
     }
 }

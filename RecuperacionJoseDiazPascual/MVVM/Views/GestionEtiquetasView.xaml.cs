@@ -1,3 +1,6 @@
+using System.Collections.ObjectModel;
+using RecuperacionJoseDiazPascual.MVVM.ViewModels;
+
 namespace RecuperacionJoseDiazPascual.MVVM.Views;
 
 public partial class GestionEtiquetasView : ContentPage
@@ -6,6 +9,6 @@ public partial class GestionEtiquetasView : ContentPage
 	{
 		InitializeComponent();
 
-		BindingContext = new GestionEtiquetasView();
+		BindingContext = new GestionEtiquetasViewModel();
 	}
 }

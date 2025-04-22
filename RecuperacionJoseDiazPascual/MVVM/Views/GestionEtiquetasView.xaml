@@ -11,7 +11,8 @@
                    HorizontalOptions="Center" />
 
             <!-- Entry para nombre de etiqueta nueva o editada -->
-            <Entry x:Name="NombreEtiquetaEntry"
+            <Entry x:Name="NombreEtiqueta"
+                   Text="{Binding NombreEtiqueta}"
                    Placeholder="Nombre de la etiqueta"
                    FontSize="16" />
 
@@ -28,23 +29,29 @@
                    Margin="0,20,0,10" />
 
             <!-- Lista de etiquetas con botones para editar y eliminar -->
-            <CollectionView ItemsSource="{Binding ListaEtiquetas}">
+            <CollectionView ItemsSource="{Binding Etiqueta}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame BorderColor="Gray" CornerRadius="10" Padding="10">
-                            <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="15">
-                                <Label Text="{Binding Titulo}" VerticalOptions="Center" FontSize="16" />
-                                <Button Text="Editar"
-                                        CommandParameter="{Binding .}"
-                                        BackgroundColor="DodgerBlue"
-                                        TextColor="White"
-                                        WidthRequest="70" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Titulo}" 
+                                       VerticalOptions="Center" 
+                                       FontSize="16"
+                                       Grid.Column="0"
+                                       HorizontalOptions="Start" />
                                 <Button Text="Eliminar"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EliminarEtiquetaCommand}"
                                         CommandParameter="{Binding .}"
                                         BackgroundColor="Red"
                                         TextColor="White"
-                                        WidthRequest="80" />
-                            </HorizontalStackLayout>
+                                        WidthRequest="80"
+                                        Grid.Column="1"
+                                        HorizontalOptions="End" />
+                            </Grid>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
