@@ -21,6 +21,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public ICommand AgregarCommand { get; set; }
         public ICommand CompletarTareaCommand { get; set; }
         public ICommand EditarTareaCommand { get; set; }
+        public ICommand EliminarTareaCommand { get; set; }
 
         public PrinicipalViewModel()
         {
@@ -51,6 +52,14 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                     await navigationPage.PushAsync(new AgregarView(tarea));
                     RefrescarTareas();
                 }
+            });
+
+            EliminarTareaCommand = new Command<Tarea>(async (tarea) =>
+            {
+                if (tarea == null) return;
+
+                App.TareaRepositorio.DeleteItem(tarea);
+                RefrescarTareas();
             });
 
             Tareas = new ObservableCollection<Tarea>();
