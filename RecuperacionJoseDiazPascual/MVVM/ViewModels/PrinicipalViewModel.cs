@@ -79,10 +79,5 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
             IsRefreshing = false;
         }
-
-        private void AgregarTarea()
-        {
-            new AgregarView();
-        }
     }
 }
