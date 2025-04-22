@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using RecuperacionJoseDiazPascual;
 using RecuperacionJoseDiazPascual.MVVM.Models;
@@ -21,7 +22,7 @@ public class GestionEtiquetasViewModel
         VolverAgregarTarea = new Command(Volver);
         GuardarEtiquetaCommand = new Command(GuardarEtiqueta);
         EditarEtiquetaCommand = new Command<string>(EditarEtiqueta);
-        EliminarEtiquetaCommand = new Command<string>(EliminarEtiqueta);
+        EliminarEtiquetaCommand = new Command<Etiqueta>(EliminarEtiqueta);
     }
 
     public void GuardarEtiqueta()
@@ -62,9 +63,31 @@ public class GestionEtiquetasViewModel
         
     }
 
-    public void EliminarEtiqueta(string etiqueta)
+    public async void EliminarEtiqueta(Etiqueta etiqueta)
     {
-        
+        if (etiqueta != null)
+        {
+            bool decision = await Application.Current.MainPage.DisplayAlert(
+                                "Confirmación",
+                                $"¿Estás seguro de que quieres eliminar la etiqueta \"{etiqueta.Titulo}\"?",
+                                "Sí", "No"
+                            );
+
+            if (decision)
+            {
+                App.EtiquetaRepositorio.DeleteItem(etiqueta);
+                Etiqueta.Remove(etiqueta);
+            }
+
+        }
+        else
+        {
+            await Application.Current.MainPage.DisplayAlert(
+                "Aviso",
+                "Debes seleccionar una etiqueta",
+                "Aceptar"
+            );
+        }
     }
 
     public async void Volver()
