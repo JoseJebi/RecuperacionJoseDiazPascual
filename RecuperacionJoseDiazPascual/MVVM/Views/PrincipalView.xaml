@@ -2,12 +2,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.PrincipalView"
-             Title="PrincipalView">
+             Title="Lista de tareas">
 
     <Grid>
-        <StackLayout Padding="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="9*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackLayout Grid.Column="1" Padding="20">
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                    Command="{Binding RefreshCommand}">
+                         Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding Tareas}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -40,11 +46,8 @@
 
         <Button
             Text="+"
-            FontSize="24"
             WidthRequest="60"
             HeightRequest="60"
-            BackgroundColor="#2196F3"
-            TextColor="White"
             CornerRadius="30"
             HorizontalOptions="Start"
             VerticalOptions="End"
@@ -52,12 +55,10 @@
             Command="{Binding AgregarCommand}" />
 
         <Button
+            Grid.Column="2"
             Text="⟳"
-            FontSize="20"
             WidthRequest="60"
             HeightRequest="60"
-            BackgroundColor="#2196F3"
-            TextColor="White"
             CornerRadius="30"
             HorizontalOptions="End"
             VerticalOptions="End"

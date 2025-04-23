@@ -79,7 +79,7 @@
 	  <MauiXaml Update="MVVM\Views\PrincipalView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\EstiloGlobal.xaml">
+	  <MauiXaml Update="Resources\Styles\Estilos.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
