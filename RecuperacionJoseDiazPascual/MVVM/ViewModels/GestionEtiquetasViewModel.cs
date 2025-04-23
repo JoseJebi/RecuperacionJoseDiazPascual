@@ -21,7 +21,7 @@ public class GestionEtiquetasViewModel
 
         VolverAgregarTarea = new Command(Volver);
         GuardarEtiquetaCommand = new Command(GuardarEtiqueta);
-        EditarEtiquetaCommand = new Command<string>(EditarEtiqueta);
+        EditarEtiquetaCommand = new Command<Etiqueta>(EditarEtiqueta);
         EliminarEtiquetaCommand = new Command<Etiqueta>(EliminarEtiqueta);
     }
 
@@ -58,10 +58,44 @@ public class GestionEtiquetasViewModel
 
     }
 
-    public void EditarEtiqueta(string etiqueta)
+    public async void EditarEtiqueta(Etiqueta etiqueta)
     {
-        
+        if (etiqueta != null)
+        {
+            string nuevoNombre = await Application.Current.MainPage.DisplayPromptAsync(
+                "Editar Etiqueta",
+                $"Modifica el nombre de la etiqueta \"{etiqueta.Titulo}\"",
+                placeholder: "Nuevo nombre",
+                initialValue: etiqueta.Titulo,
+                maxLength: 50,
+                keyboard: Keyboard.Text
+            );
+
+            if (!string.IsNullOrWhiteSpace(nuevoNombre))
+            {
+                bool yaExiste = Etiqueta.Any(e => e.Titulo == nuevoNombre);
+                if (yaExiste && nuevoNombre != etiqueta.Titulo)
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Aviso",
+                        "Ya existe una etiqueta con ese nombre.",
+                        "Aceptar"
+                    );
+                }
+                else
+                {
+                    etiqueta.Titulo = nuevoNombre;
+                    App.EtiquetaRepositorio.SaveItem(etiqueta);
+
+                    var index = Etiqueta.IndexOf(etiqueta);
+                    Etiqueta.RemoveAt(index);
+                    Etiqueta.Insert(index, etiqueta);
+                }
+            }
+        }
     }
+
+
 
     public async void EliminarEtiqueta(Etiqueta etiqueta)
     {
