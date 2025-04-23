@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
+using System.Collections.ObjectModel;
 
 namespace RecuperacionJoseDiazPascual.MVVM.Models
 {
@@ -25,7 +26,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.Models
         public string Prioridad { get; set; }
 
         [ManyToMany(typeof(EtiquetasTarea), CascadeOperations = CascadeOperation.All)]
-        public List<Etiqueta> Etiquetas { get; set; }
+        public ObservableCollection<Etiqueta> Etiquetas { get; set; }
 
         public String EtiquetasString()
         {

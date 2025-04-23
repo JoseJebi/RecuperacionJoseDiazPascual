@@ -26,10 +26,10 @@
                            TextColor="Gray"/>
 
                     <!-- CollectionView con CheckBox para selección múltiple -->
-                    <CollectionView ItemsSource="{Binding ListaEtiquetas}" SelectionMode="None">
+                    <CollectionView ItemsSource="{Binding ListaEtiquetas}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <HorizontalStackLayout Spacing="10">
+                                <HorizontalStackLayout Spacing="9">
                                     <CheckBox IsChecked="{Binding Seleccionada}"/>
                                     <Label Text="{Binding Titulo}" TextColor="White"/>
                                 </HorizontalStackLayout>

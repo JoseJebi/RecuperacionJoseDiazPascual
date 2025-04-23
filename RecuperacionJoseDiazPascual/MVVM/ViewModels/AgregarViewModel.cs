@@ -4,6 +4,7 @@ using RecuperacionJoseDiazPascual.MVVM.Views;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
@@ -20,8 +21,9 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         public string PrioridadSeleccionada { get; set; }
 
         // Cambiamos a ObservableCollection para que la UI se actualice automáticamente
-        public ObservableCollection<Etiqueta> ListaEtiquetas { get; set; }
+        public List<Etiqueta> ListaEtiquetas { get; set; }
 
+        public ObservableCollection<EtiquetaSeleccionada> EtiquetaSeleccionadas { get; set; }
 
         // Comandos
         public ICommand AgTarea { get; }
@@ -35,7 +37,15 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
             PrioridadSeleccionada = ListaPrioridades[1];
 
-            ListaEtiquetas = new ObservableCollection<Etiqueta>(App.EtiquetaRepositorio.GetItems());
+            ListaEtiquetas = App.EtiquetaRepositorio.GetItems();
+
+            EtiquetaSeleccionadas = new ObservableCollection<EtiquetaSeleccionada>(
+                ListaEtiquetas.Select(e => new EtiquetaSeleccionada
+                {
+                    Etiqueta = e,
+                    Seleccionada = false
+                })
+            );
 
 
             AgTarea = new Command(GuardarTarea);
@@ -55,6 +65,18 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             ListaPrioridades = new List<string> { "Alta", "Media", "Baja" };
             PrioridadSeleccionada = tarea.Prioridad;
 
+            ListaEtiquetas = App.EtiquetaRepositorio.GetItems();
+
+            ListaEtiquetas = App.EtiquetaRepositorio.GetItems();
+
+            EtiquetaSeleccionadas = new ObservableCollection<EtiquetaSeleccionada>(
+                ListaEtiquetas.Select(e => new EtiquetaSeleccionada
+                {
+                    Etiqueta = e,
+                    Seleccionada = tarea.Etiquetas?.Any(et => et.Titulo == e.Titulo) ?? false
+                })
+            );
+
 
             AgTarea = new Command(GuardarTarea);
             VolverPaginaPrincipal = new Command(Volver);
@@ -64,36 +86,65 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
         private async void GuardarTarea()
         {
             if (string.IsNullOrWhiteSpace(AgTitulo) ||
-                string.IsNullOrWhiteSpace(AgDescripcion) ||
-                PrioridadSeleccionada == null)
+                string.IsNullOrWhiteSpace(AgDescripcion))
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Por favor, completa todos los campos", "Aceptar");
-                return;
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error", 
+                    "Por favor, completa todos los campos", 
+                    "Aceptar"
+                );
             }
-
-            if (tareaEditando != null)      //Si estamos EDITANDO una tarea que ya existe pasa esto
+            else if (tareaEditando != null)
             {
                 tareaEditando.Titulo = AgTitulo;
                 tareaEditando.Descripcion = AgDescripcion;
                 tareaEditando.Prioridad = PrioridadSeleccionada;
                 tareaEditando.Estado = Estado ? "Finalizada" : "Pendiente";
+                tareaEditando.Etiquetas = new ObservableCollection<Etiqueta>();
 
-                App.TareaRepositorio.SaveItem(tareaEditando);
-                await Application.Current.MainPage.DisplayAlert("Éxito", "Tarea editada con éxito", "Aceptar");
+                if (EtiquetaSeleccionadas != null)
+                {
+                    foreach (var item in EtiquetaSeleccionadas.Where(e => e.Seleccionada))
+                    {
+                        Etiqueta etiq = App.EtiquetaRepositorio.GetItem(e => e.Titulo == item.Etiqueta.Titulo);
+                        tareaEditando.Etiquetas.Add(etiq);
+                    };
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Etiquetas seleccionada está nulo", "Ok");
+                }
+
+                    App.TareaRepositorio.SaveItemCascada(tareaEditando);
+                await Application.Current.MainPage.DisplayAlert(
+                    "Éxito", 
+                    "Tarea editada con éxito", 
+                    "Aceptar"
+                );
             }
-
             else
-            {       //Si estamos CREANDO una nueva tarea pasa esto
+            {
                 var nuevaTarea = new Tarea
                 {
                     Titulo = AgTitulo,
                     Descripcion = AgDescripcion,
                     Prioridad = PrioridadSeleccionada,
-                    Estado = Estado ? "Finalizada" : "Pendiente"
+                    Estado = Estado ? "Finalizada" : "Pendiente",
+                    Etiquetas = new ObservableCollection<Etiqueta>()
                 };
 
-                App.TareaRepositorio.SaveItem(nuevaTarea);
-                await Application.Current.MainPage.DisplayAlert("Éxito", "Tarea creada con éxito", "Aceptar");
+                foreach ( var item in EtiquetaSeleccionadas.Where( x => x.Seleccionada)){
+                    Etiqueta etiq = App.EtiquetaRepositorio.GetItem(e => e.Titulo == item.Etiqueta.Titulo);
+                    nuevaTarea.Etiquetas.Add(etiq);
+                };
+
+                App.TareaRepositorio.SaveItemCascada(nuevaTarea);
+
+                await Application.Current.MainPage.DisplayAlert(
+                    "Éxito", 
+                    "Tarea creada con éxito", 
+                    "Aceptar"
+                );
             }
 
             LimpiarCampos();
@@ -111,7 +162,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 new GestionEtiquetasView()
             );
         }
-
 
         private void LimpiarCampos()
         {

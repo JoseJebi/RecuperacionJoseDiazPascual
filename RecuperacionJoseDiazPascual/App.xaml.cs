@@ -10,6 +10,7 @@ namespace RecuperacionJoseDiazPascual
         public static BaseRepository<Etiqueta> EtiquetaRepositorio { get; set; }
         public static BaseRepository<EtiquetasTarea> EtiquetasTareaRepositorio { get; set; }
 
+
         public App(BaseRepository<Tarea> objTareaRepo, BaseRepository<Etiqueta> objEtiquetaRepo, 
             BaseRepository<EtiquetasTarea> objEtiquetasTareaRepo)
         {
