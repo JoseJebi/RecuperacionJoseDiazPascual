@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.PrincipalView"
-             Title="PrincipalView">
+             Title="Lista de tareas">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -46,11 +46,8 @@
 
         <Button
             Text="+"
-            FontSize="24"
             WidthRequest="60"
             HeightRequest="60"
-            BackgroundColor="#2196F3"
-            TextColor="White"
             CornerRadius="30"
             HorizontalOptions="Start"
             VerticalOptions="End"
@@ -60,11 +57,8 @@
         <Button
             Grid.Column="2"
             Text="⟳"
-            FontSize="20"
             WidthRequest="60"
             HeightRequest="60"
-            BackgroundColor="#2196F3"
-            TextColor="White"
             CornerRadius="30"
             HorizontalOptions="End"
             VerticalOptions="End"

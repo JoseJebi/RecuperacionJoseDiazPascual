@@ -1,8 +1,8 @@
 namespace RecuperacionJoseDiazPascual.Resources.Styles;
 
-public partial class EstiloGlobal : ContentPage
+public partial class Estilos : ResourceDictionary
 {
-	public EstiloGlobal()
+	public Estilos()
 	{
 		InitializeComponent();
 	}
