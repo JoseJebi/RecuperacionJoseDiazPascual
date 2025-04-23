@@ -28,7 +28,9 @@ namespace RecuperacionJoseDiazPascual.MVVM.Models
         [ManyToMany(typeof(EtiquetasTarea), CascadeOperations = CascadeOperation.All)]
         public ObservableCollection<Etiqueta> Etiquetas { get; set; }
 
-        public String EtiquetasString()
+        public String StringEtiquetas { get; set; }
+
+        public void EtiquetasString()
         {
             string etiquetas = "";
 
@@ -37,7 +39,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.Models
                 etiquetas += etiqueta.Titulo + ", ";
             }
 
-            return etiquetas.Substring(0, etiquetas.Length - 3);
+            StringEtiquetas = etiquetas.Substring(0, etiquetas.Length - 3);
         }
     }
 }
