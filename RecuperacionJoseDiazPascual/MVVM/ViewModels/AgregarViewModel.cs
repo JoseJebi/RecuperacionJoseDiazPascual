@@ -13,8 +13,8 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
     [AddINotifyPropertyChangedInterface]
     public class AgregarViewModel
     {
-        public string? AgTitulo { get; set; }
-        public string? AgDescripcion { get; set; }
+        public string AgTitulo { get; set; }
+        public string AgDescripcion { get; set; }
         public bool Estado { get; set; }
 
         public List<string> ListaPrioridades { get; set; }
@@ -22,14 +22,15 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
         // Cambiamos a ObservableCollection para que la UI se actualice automáticamente
         public List<Etiqueta> ListaEtiquetas { get; set; }
-
         public ObservableCollection<EtiquetaSeleccionada> EtiquetaSeleccionadas { get; set; }
 
         // Comandos
-        public ICommand AgTarea { get; }
+        private Command _agTarea;
+        public ICommand AgTarea => _agTarea;
         public ICommand VolverPaginaPrincipal { get; }
         public ICommand GestionEtiquetas { get; }
         public ICommand LimpiarEtiquetasCommand { get; }
+
         private Tarea tareaEditando;
 
         public AgregarViewModel()
@@ -47,8 +48,30 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 })
             );
 
+            foreach (var item in EtiquetaSeleccionadas)
+            {
+                item.PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == nameof(EtiquetaSeleccionada.Seleccionada))
+                    {
+                        NotificarCambioGuardar();
+                    }
+                };
+            }
 
-            AgTarea = new Command(GuardarTarea);
+            _agTarea = new Command(
+                execute: ()=> 
+                {
+                    GuardarTarea();
+                },
+                canExecute: () =>
+                {
+                    return !string.IsNullOrWhiteSpace(AgTitulo) && !string.IsNullOrWhiteSpace(AgDescripcion) &&
+                    EtiquetaSeleccionadas.Any(e => e.Seleccionada);
+                }
+            );
+
+
             VolverPaginaPrincipal = new Command(Volver);
             GestionEtiquetas = new Command(GestEtiquetas);
         }
@@ -75,24 +98,36 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 })
             );
 
+            foreach (var item in EtiquetaSeleccionadas)
+            {
+                item.PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == nameof(EtiquetaSeleccionada.Seleccionada))
+                    {
+                        NotificarCambioGuardar();
+                    }
+                };
+            }
 
-            AgTarea = new Command(GuardarTarea);
+            _agTarea = new Command(
+                execute: () =>
+                {
+                    GuardarTarea();
+                },
+                canExecute: () =>
+                {
+                    return !string.IsNullOrWhiteSpace(AgTitulo) && !string.IsNullOrWhiteSpace(AgDescripcion) &&
+                    EtiquetaSeleccionadas.Any(e => e.Seleccionada);
+                }
+            );
+
             VolverPaginaPrincipal = new Command(Volver);
             GestionEtiquetas = new Command(GestEtiquetas);
         }
 
         private async void GuardarTarea()
         {
-            if (string.IsNullOrWhiteSpace(AgTitulo) ||
-                string.IsNullOrWhiteSpace(AgDescripcion))
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Error", 
-                    "Por favor, completa todos los campos", 
-                    "Aceptar"
-                );
-            }
-            else if (tareaEditando != null)
+            if (tareaEditando != null)
             {
                 tareaEditando.Titulo = AgTitulo;
                 tareaEditando.Descripcion = AgDescripcion;
@@ -156,6 +191,11 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
             await Application.Current.MainPage.Navigation.PushAsync(
                 new GestionEtiquetasView()
             );
+        }
+
+        public void NotificarCambioGuardar()
+        {
+            _agTarea.ChangeCanExecute();
         }
 
         private void LimpiarCampos()

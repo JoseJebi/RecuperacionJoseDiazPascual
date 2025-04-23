@@ -19,4 +19,9 @@ public partial class AgregarView : ContentPage
 
         BindingContext = new AgregarViewModel(tarea);
     }
+
+    private void Editor_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        ((AgregarViewModel)BindingContext).NotificarCambioGuardar();
+    }
 }

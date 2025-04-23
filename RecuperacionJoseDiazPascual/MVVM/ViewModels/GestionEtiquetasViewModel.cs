@@ -95,8 +95,6 @@ public class GestionEtiquetasViewModel
         }
     }
 
-
-
     public async void EliminarEtiqueta(Etiqueta etiqueta)
     {
         if (etiqueta != null)
