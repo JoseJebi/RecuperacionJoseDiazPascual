@@ -39,7 +39,7 @@ namespace RecuperacionJoseDiazPascual.MVVM.Models
                 etiquetas += etiqueta.Titulo + ", ";
             }
 
-            StringEtiquetas = etiquetas.Substring(0, etiquetas.Length - 3);
+            StringEtiquetas = etiquetas.Substring(0, etiquetas.Length - 2);
         }
     }
 }

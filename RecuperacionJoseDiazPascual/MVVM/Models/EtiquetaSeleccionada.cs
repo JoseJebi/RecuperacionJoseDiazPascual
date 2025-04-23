@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RecuperacionJoseDiazPascual.MVVM.Models;
 
-namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
+namespace RecuperacionJoseDiazPascual.MVVM.Models
 {
     public class EtiquetaSeleccionada
     {

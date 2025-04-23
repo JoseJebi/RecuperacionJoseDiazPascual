@@ -67,8 +67,6 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
 
             ListaEtiquetas = App.EtiquetaRepositorio.GetItems();
 
-            ListaEtiquetas = App.EtiquetaRepositorio.GetItems();
-
             EtiquetaSeleccionadas = new ObservableCollection<EtiquetaSeleccionada>(
                 ListaEtiquetas.Select(e => new EtiquetaSeleccionada
                 {
@@ -102,20 +100,15 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                 tareaEditando.Estado = Estado ? "Finalizada" : "Pendiente";
                 tareaEditando.Etiquetas = new ObservableCollection<Etiqueta>();
 
-                if (EtiquetaSeleccionadas != null)
+                foreach (var item in EtiquetaSeleccionadas.Where(e => e.Seleccionada))
                 {
-                    foreach (var item in EtiquetaSeleccionadas.Where(e => e.Seleccionada))
-                    {
-                        Etiqueta etiq = App.EtiquetaRepositorio.GetItem(e => e.Titulo == item.Etiqueta.Titulo);
-                        tareaEditando.Etiquetas.Add(etiq);
-                    };
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Etiquetas seleccionada está nulo", "Ok");
-                }
+                    Etiqueta etiq = App.EtiquetaRepositorio.GetItem(e => e.Titulo == item.Etiqueta.Titulo);
+                    tareaEditando.Etiquetas.Add(etiq);
+                };
 
-                    App.TareaRepositorio.SaveItemCascada(tareaEditando);
+                tareaEditando.EtiquetasString();
+
+                App.TareaRepositorio.SaveItemCascada(tareaEditando);
                 await Application.Current.MainPage.DisplayAlert(
                     "Éxito", 
                     "Tarea editada con éxito", 
@@ -137,6 +130,8 @@ namespace RecuperacionJoseDiazPascual.MVVM.ViewModels
                     Etiqueta etiq = App.EtiquetaRepositorio.GetItem(e => e.Titulo == item.Etiqueta.Titulo);
                     nuevaTarea.Etiquetas.Add(etiq);
                 };
+
+                nuevaTarea.EtiquetasString();
 
                 App.TareaRepositorio.SaveItemCascada(nuevaTarea);
 
