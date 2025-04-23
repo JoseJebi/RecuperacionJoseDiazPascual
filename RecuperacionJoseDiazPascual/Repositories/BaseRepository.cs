@@ -26,8 +26,8 @@ namespace RecuperacionJoseDiazPascual.Repositories
         {
             try
             {
-                //connection.Delete(item);
-                connection.Delete(item, true);
+                connection.Delete(item);
+                //connection.Delete(item, true);
             }
             catch (Exception ex)
             {
