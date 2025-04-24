@@ -2,18 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecuperacionJoseDiazPascual.MVVM.Views.AgregarView"
-             Title="Agregar Tarea"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
     
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="20">
-            <!-- Título de la página -->
-            <Label Text="Nueva Tarea" 
-                   FontSize="24" 
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center" 
-                   TextColor="{StaticResource Primary}"/>
-
             <!-- Selector de etiquetas -->
             <Frame CornerRadius="12"  
                    Padding="15" 
@@ -118,13 +110,7 @@
 
             <!-- Botón guardar tarea -->
             <Button Text="Guardar Tarea" 
-                    Command="{Binding AgTarea}"
-                    BackgroundColor="{StaticResource Primary}"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    CornerRadius="10"
-                    HeightRequest="50"
-                    Margin="0,20,0,0"/>
+                    Command="{Binding AgTarea}"/>
 
             <!-- Botón volver página principal -->
             <Button

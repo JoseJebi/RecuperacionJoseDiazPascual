@@ -2,12 +2,16 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecuperacionJoseDiazPascual.Resources.Styles.Estilos">
+    
     <Style TargetType="Button">
         <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
         <Setter Property="TextColor" Value="White" />
         <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="HeightRequest" Value="50"/>
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Padding" Value="10,5" />
+        <Setter Property="Margin" Value="0,20,0,0"/>
     </Style>
 
 </ResourceDictionary>

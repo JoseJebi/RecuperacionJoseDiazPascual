@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RecuperacionJoseDiazPascual.MVVM.Views.GestionEtiquetasView"
-             Title="GestionEtiquetasView">
+             x:Class="RecuperacionJoseDiazPascual.MVVM.Views.GestionEtiquetasView">
+    
     <ScrollView>
         <VerticalStackLayout>
-            <Label Text="Gestión de Etiquetas"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" />
-
+            <BoxView HeightRequest="20" Color="Transparent" />
             <!-- Entry para nombre de etiqueta nueva o editada -->
             <Entry x:Name="NombreEtiqueta"
+                   Placeholder="Crea una etiqueta"
                    Text="{Binding NombreEtiqueta}"
-                   Placeholder="Nombre de la etiqueta"
                    FontSize="16" />
 
             <!-- Botón para guardar (agregar o actualizar) -->
-            <Button Text="Guardar"
-                    Command="{Binding GuardarEtiquetaCommand}"
-                    BackgroundColor="Green"
-                    TextColor="White"
-                    FontAttributes="Bold" />
+            <Button Text="Crear etiqueta"
+                    Command="{Binding GuardarEtiquetaCommand}"/>
+
+            <BoxView HeightRequest="35" Color="Transparent" />
 
             <Label Text="Etiquetas Disponibles"
-                   FontSize="18"
+                   FontSize="28"
                    FontAttributes="Bold"
                    Margin="0,20,0,10" />
 
@@ -46,17 +41,11 @@
                                 <HorizontalStackLayout Grid.Column="1" Spacing="10">
                                     <Button Text="Editar"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditarEtiquetaCommand}"
-                                            CommandParameter="{Binding .}"
-                                            BackgroundColor="Green"
-                                            TextColor="White"
-                                            WidthRequest="80" />
+                                            CommandParameter="{Binding .}" />
                                     
                                     <Button Text="Eliminar"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EliminarEtiquetaCommand}"
-                                            CommandParameter="{Binding .}"
-                                            BackgroundColor="Red"
-                                            TextColor="White"
-                                            WidthRequest="80" />
+                                            CommandParameter="{Binding .}" />
                                 </HorizontalStackLayout>
                             </Grid>
                         </Frame>
